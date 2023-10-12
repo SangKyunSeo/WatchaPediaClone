@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.member.dao.MemberDAO">
+
+    <!-- 회원가입 로직 -->
+    <insert id="insertMember" parameterType="memberVO" useGeneratedKeys="true" keyProperty="member_num">
+        INSERT INTO member (member_name, member_email, member_pw, member_age, member_gender)
+        VALUES (#{member_name},#{member_email},#{member_pw},1997,1)
+    </insert>
+    <!-- 회원 권한 추가 -->
+    <insert id="insertMemberRole" parameterType="memberRole">
+        INSERT INTO member_role (member_id, role_name)
+        VALUES (#{member_id}, #{role_name})
+    </insert>
+    <!-- 로그인 로직 -->
+    <select id="selectMemberByEmail" parameterType="customUserDetails" resultType="memberVO">
+        SELECT * FROM member WHERE member_email = #{username}
+    </select>
+
+    <!-- 회원 권한 조회 -->
+    <select id="selectMemberRoleByNum" parameterType="integer" resultType="memberRole">
+        SELECT * FROM member_role WHERE member_id = #{member_num}
+    </select>
+
+</mapper>
