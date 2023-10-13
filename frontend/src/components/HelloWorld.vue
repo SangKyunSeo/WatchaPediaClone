@@ -1,7 +1,38 @@
-<script setup lang="ts">
-defineProps<{
-  msg: string
-}>()
+<script lang="ts">
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+
+// defineProps<{
+//   msg: string
+// }>()
+export default {
+
+  data() {
+    return {
+      msg: '',
+      router: useRouter(),
+      checkLogin: true,
+      memberNum: ''
+    }
+  },
+  mounted(){
+    this.checkingLogin();
+  },
+  methods: {
+    login() {
+      axios.get('/loginForm').then((result) => {
+        this.router.push({
+          path: '/loginForm'
+        })
+      });
+    },
+    checkingLogin(){
+      this.memberNum = this.$store.getters.checkLogin;
+      if(!this.memberNum) this.checkLogin = false;
+      else this.checkLogin = true;
+    }
+  }
+}
 </script>
 
 <template>
@@ -22,7 +53,9 @@ defineProps<{
             <input type="text" placeholder="검색어 입력">
           </li>
           <li class="header_login">
-            <router-link to="/loginForm">로그인</router-link>
+            <button type="button" @click="login()" v-if="checkLogin == false">로그인</button>
+            <button type="button" v-if="checkLogin == true">로그아웃</button>
+            <!-- <router-link to="/loginForm">로그인</router-link> -->
           </li>
         </ul>
       </div>

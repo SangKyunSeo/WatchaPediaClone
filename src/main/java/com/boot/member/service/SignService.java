@@ -5,10 +5,12 @@ import com.boot.member.dto.MemberRole;
 import com.boot.member.dto.SignRequest;
 import com.boot.member.dto.SignResponse;
 import com.boot.member.vo.MemberVO;
+import com.boot.security.JwtAuthenticationFilter;
 import com.boot.security.JwtTokenProvider;
 import com.boot.security.TokenInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -36,11 +38,17 @@ public class SignService {
         if(!passwordEncoder.matches(request.getMember_password(),memberVO.getMember_pw())){
             throw new BadCredentialsException("잘못된 계정 정보!");
         }
+
         MemberRole memberRole = memberDAO.selectMemberRoleByNum(memberVO.getMember_num());
         SignResponse signResponse = new SignResponse();
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberVO.getMember_email(), memberVO.getMember_pw());
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberVO.getMember_email(), request.getMember_password());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.add("Authorization","Bearer " + tokenInfo);
+
+        log.info("HttpHeader TokenInfo : " + tokenInfo);
 
         signResponse.setMember_num(memberVO.getMember_num());
         signResponse.setMember_email(memberVO.getMember_email());

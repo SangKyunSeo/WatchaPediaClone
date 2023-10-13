@@ -7,6 +7,8 @@ import com.boot.member.service.SignService;
 import com.boot.member.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,16 +24,17 @@ public class MemberRestController {
     // 로그인 처리 로직
 
     @PostMapping("/login")
-    public SignResponse login(@RequestParam String username, @RequestParam String password) throws Exception {
+    public SignResponse login(String username, String password) throws Exception {
         log.info("username: " + username);
         String member_email = username;
         String member_pw = password;
         MemberVO memberVO = memberService.selectMemberInfoForLogin(username);
         SignRequest signRequest = new SignRequest();
+
         signRequest.setMember_email(memberVO.getMember_email());
         signRequest.setMember_num(memberVO.getMember_num());
         signRequest.setMember_name(memberVO.getMember_name());
-        signRequest.setMember_password(memberVO.getMember_pw());
+        signRequest.setMember_password(password);
 
         SignResponse signResponse = signService.login(signRequest);
         return signResponse;

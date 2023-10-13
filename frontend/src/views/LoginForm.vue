@@ -1,6 +1,7 @@
 <script lang="ts">
 import {useRouter} from 'vue-router';
 import axios from 'axios';
+import { useStore } from 'vuex';
 
 //import TheWelcome from '../components/TheWelcome.vue'
 export default{
@@ -9,7 +10,18 @@ export default{
       username: '',
       password: '',
       router: useRouter(),
-      isSuccess: {}
+      userInfo: {
+        member_num: '',
+        member_email: '',
+        member_name: '',
+        member_password: '',
+        role_name: '',
+        token: {
+          grantType: '',
+          accessToken: '',
+          refreshToken: ''
+        }
+      },
     }
   },
   methods: {
@@ -19,12 +31,24 @@ export default{
       });
     },
     login(){
-      axios.post('http://localhost:8020/login', null, { params: {username:this.username, password:this.password}})
+      axios.post('/login', null, { params: {username:this.username, password:this.password}})
       .then((result) => {
         if(result.data === 'loginError'){
           alert('로그인 실패!');
         }else{
-          console.log(result.config);
+          this.userInfo = {
+              member_num: result.data.member_num,
+              member_email: result.data.member_email,
+              member_name: result.data.member_name,
+              member_password: result.data.member_password,
+              role_name: result.data.role_name,
+              token: result.data.token
+          }
+
+          this.$store.commit('settingInfo',this.userInfo);
+          
+          alert((this.$store.getters.getUserInfo).member_name);
+
           this.router.push({
             path: '/main'
           });

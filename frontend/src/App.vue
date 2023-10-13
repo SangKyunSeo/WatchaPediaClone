@@ -1,6 +1,27 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+<script lang="ts">
+  import { RouterLink, RouterView } from 'vue-router'
+  import HelloWorld from './components/HelloWorld.vue'
+  export default{
+    components:{
+      HelloWorld: HelloWorld
+    },
+    data(){
+      return{
+        checkLogin: true,
+        memberNum: ''
+      }
+    },
+    mounted(){
+      this.checkingLogin();
+    },
+    methods: {
+      checkingLogin() {
+        this.memberNum = this.$store.getters.checkLogin;
+        if (!this.memberNum) this.checkLogin = false;
+        else this.checkLogin = true;
+      }
+    }
+  }
 </script>
 
 <template>
@@ -8,7 +29,7 @@ import HelloWorld from './components/HelloWorld.vue'
     <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
 
     <div class="wrapper">
-      <HelloWorld msg="WatchPedia" />
+      <HelloWorld msg="WatchPedia"/>
 
       <!-- <nav>
         <RouterLink to="/movie">영화</RouterLink>

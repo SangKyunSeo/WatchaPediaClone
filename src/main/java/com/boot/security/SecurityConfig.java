@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -30,6 +31,7 @@ public class SecurityConfig {
     private final CustomUserDetailsService service;
     private final JwtAuthenticationFilter filter;
     private final JwtTokenProvider provide;
+    private final AuthSuccessHandler authSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -38,7 +40,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/css/**","/js/**","/img/**","/assets/**","/favicon.ico");
+        return (web) -> web.ignoring().requestMatchers("/css/**","/js/**","/img/**","/assets/**","/favicon.ico","/main","/registerForm","/register","/","/login");
     }
 
     @Bean
@@ -58,7 +60,9 @@ public class SecurityConfig {
         });
 
         // 권한이 필요한 대상
-        http.authorizeHttpRequests((authz) -> authz.requestMatchers("/main","/registerForm","/register","/").permitAll().anyRequest().authenticated());
+        http.authorizeHttpRequests(authz -> authz
+                .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+                .requestMatchers("/main","/registerForm","/register","/","/login").permitAll().anyRequest().authenticated());
 
         // 세션을 사용하지 않음
         http.sessionManagement((configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)));
@@ -72,7 +76,8 @@ public class SecurityConfig {
                 .loginProcessingUrl("/login")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/main")
+//                .defaultSuccessUrl("/main")
+                .successHandler(authSuccessHandler)
                 .failureUrl("/loginError")
                 .permitAll()));
 

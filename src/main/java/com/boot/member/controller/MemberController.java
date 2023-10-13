@@ -29,10 +29,6 @@ public class MemberController {
         return "index";
     }
 
-
-
-
-
     // 회원 가입 폼 로직
     @GetMapping("/registerForm")
     public String registerForm(){
