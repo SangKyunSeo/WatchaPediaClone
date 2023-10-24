@@ -1,4 +1,8 @@
 {
+  "compilerOptions": {
+    "module": "ESNext",
+    "allowJs": true,
+  },
   "files": [],
   "references": [
     {
@@ -7,5 +11,6 @@
     {
       "path": "./tsconfig.app.json"
     }
-  ]
+  ],
+  "types": [ "node" ],
 }

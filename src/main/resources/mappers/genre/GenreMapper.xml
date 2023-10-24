@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.member.dao.GenreDAO">
+
+    <!-- 영화 장르 조회  -->
+    <select id="selectMovieGenre" resultType="movieGenreVO" parameterType="integer">
+        SELECT mg.movie_genre_num, mg.movie_num, mg.genre_num, g.genre_name
+        FROM movie_genre mg JOIN genre g ON mg.genre_num = g.genre_num
+        WHERE mg.movie_num = #{move_num};
+    </select>
+
+    <!-- Tv장르 조회 -->
+    <select id="selectTvGenre" resultType="tvGenreVO" parameterType="integer">
+        SELECT tg.tv_genre_num, tg.tv_num, tg.genre_num, g.genre_name
+        FROM tv_genre tg JOIN genre g ON tg.genre_num = g.genre_num
+        WHERE tg.tv_num = #{tv_num};
+    </select>
+</mapper>

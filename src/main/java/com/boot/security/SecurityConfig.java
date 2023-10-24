@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -32,6 +33,8 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter filter;
     private final JwtTokenProvider provide;
     private final AuthSuccessHandler authSuccessHandler;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -40,7 +43,9 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/css/**","/js/**","/img/**","/assets/**","/favicon.ico","/main","/registerForm","/register","/","/login");
+        return (web) -> web.ignoring().requestMatchers("/css/**","/js/**","/img/**",
+                "/assets/**","/movieimg/**","/tvimg/**","/personimg/**",
+                "/favicon.ico","/main","/registerForm","/register","/","/login","/index.html");
     }
 
     @Bean
@@ -62,13 +67,21 @@ public class SecurityConfig {
         // 권한이 필요한 대상
         http.authorizeHttpRequests(authz -> authz
                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                .requestMatchers("/main","/registerForm","/register","/","/login").permitAll().anyRequest().authenticated());
+                .requestMatchers("/main","/registerForm","/register","/loginForm",
+                        "/","/login","/mainMovie","/getMovieInfo",
+                        "/movie","/tv","/tvDetail/{tv_num}","/tvList","/tvDetail","/movieDetail","/movieDetail/{movie_num}",
+                        "/getMovieGenre","/getTvGenre","/getMovieCast",
+                        "/personDetail/{person_num}").permitAll().anyRequest().authenticated());
 
         // 세션을 사용하지 않음
         http.sessionManagement((configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)));
 
         // JWT 필터를 사용
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class);
+        // JWT 예외 처리
+//        http.exceptionHandling((exception) -> exception
+//                .authenticationEntryPoint(jwtAuthenticationEntryPoint));
 
         // 사용자 로그인 행동에 대한 정의
         http.formLogin((formLogin -> formLogin
@@ -81,6 +94,10 @@ public class SecurityConfig {
                 .failureUrl("/loginError")
                 .permitAll()));
 
+        http.logout((logout) -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/main")
+                .invalidateHttpSession(true));
         return http.build();
     }
 }

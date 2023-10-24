@@ -7,19 +7,14 @@
     },
     data(){
       return{
-        checkLogin: true,
         memberNum: ''
       }
     },
     mounted(){
-      this.checkingLogin();
+      
     },
     methods: {
-      checkingLogin() {
-        this.memberNum = this.$store.getters.checkLogin;
-        if (!this.memberNum) this.checkLogin = false;
-        else this.checkLogin = true;
-      }
+      
     }
   }
 </script>
@@ -27,15 +22,7 @@
 <template>
   <header>
     <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
-
-    <div class="wrapper">
-      <HelloWorld msg="WatchPedia"/>
-
-      <!-- <nav>
-        <RouterLink to="/movie">영화</RouterLink>
-        <RouterLink to="/tv">TV</RouterLink>
-      </nav> -->
-    </div>
+    <HelloWorld />
   </header>
 
   <RouterView />
@@ -43,8 +30,20 @@
 
 <style scoped>
 header {
-  line-height: 1.5;
-  max-height: 100vh;
+  /* line-height: 1.5;
+  max-height: 100vh; */
+  display: block;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 51;
+  background: rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
+  text-align: center;
+  width: 100%;
+  height: 62px;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 0px 0px;
+  transition: background-color 200ms 
 }
 
 .logo {
@@ -53,10 +52,10 @@ header {
 }
 
 nav {
-  width: 100%;
+  /* width: 100%;
   font-size: 12px;
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 2rem; */
 }
 
 nav a.router-link-exact-active {
@@ -79,9 +78,9 @@ nav a:first-of-type {
 
 @media (min-width: 1024px) {
   header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+    /* display: flex; */
+    /* place-items: center;
+    padding-right: calc(var(--section-gap) / 2); */
   }
 
   .logo {
@@ -95,12 +94,12 @@ nav a:first-of-type {
   }
 
   nav {
-    text-align: left;
+    /* text-align: left;
     margin-left: -1rem;
     font-size: 1rem;
 
     padding: 1rem 0;
-    margin-top: 1rem;
+    margin-top: 1rem; */
   }
 }
 </style>

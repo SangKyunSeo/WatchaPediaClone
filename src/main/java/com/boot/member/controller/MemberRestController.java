@@ -5,14 +5,12 @@ import com.boot.member.dto.SignResponse;
 import com.boot.member.service.MemberService;
 import com.boot.member.service.SignService;
 import com.boot.member.vo.MemberVO;
+import com.boot.security.TokenInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,6 +48,22 @@ public class MemberRestController {
     @PostMapping("/register")
     public String register(@RequestParam String member_email, @RequestParam String member_name, @RequestParam String member_pw){
         memberService.register(member_email,member_name,member_pw);
-        return "index";
+        return "success";
+    }
+
+    // 로그아웃 처리 API
+    @GetMapping("/logout")
+    public String logout(){
+        return "";
+    }
+
+    // refreshToken을 통한 토큰 재발급 API
+    @PostMapping("/refreshToken")
+    public TokenInfo reGenerateToken(@RequestParam String member_email, @RequestParam String member_pw){
+//        String refreshToken = authorization.substring(7);
+        //TokenInfo tokenInfo = signService.reGenerateToken(member_email, member_pw, refreshToken);
+        TokenInfo tokenInfo = signService.reGenerateToken(member_email, member_pw);
+        log.info("<< 토큰 재발급 성공 ㅎ >> : " + tokenInfo);
+        return tokenInfo;
     }
 }

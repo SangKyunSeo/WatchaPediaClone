@@ -5,12 +5,10 @@ import com.boot.member.dto.MemberRole;
 import com.boot.member.dto.SignRequest;
 import com.boot.member.dto.SignResponse;
 import com.boot.member.vo.MemberVO;
-import com.boot.security.JwtAuthenticationFilter;
 import com.boot.security.JwtTokenProvider;
 import com.boot.security.TokenInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -53,9 +51,19 @@ public class SignService {
         signResponse.setMember_num(memberVO.getMember_num());
         signResponse.setMember_email(memberVO.getMember_email());
         signResponse.setMember_name(memberVO.getMember_name());
-        signResponse.setMember_password(memberVO.getMember_pw());
+        signResponse.setMember_password(request.getMember_password());
         signResponse.setRole_name(memberRole.getRole_name());
         signResponse.setToken(tokenInfo);
         return signResponse;
+    }
+    // 토큰 재발급
+    //public TokenInfo reGenerateToken(String member_email, String member_pw, String refreshToken){
+    public TokenInfo reGenerateToken(String member_email, String member_pw){
+        log.info("member_email : " + member_email + ", member_pw : " + member_pw);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(member_email, member_pw);
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+
+        return tokenInfo;
     }
 }

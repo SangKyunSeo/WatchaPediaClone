@@ -46,9 +46,8 @@ export default{
           }
 
           this.$store.commit('settingInfo',this.userInfo);
+          this.$store.commit('successLogin');
           
-          alert((this.$store.getters.getUserInfo).member_name);
-
           this.router.push({
             path: '/main'
           });

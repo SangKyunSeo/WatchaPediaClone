@@ -1,5 +1,17 @@
-<script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+<script lang="ts">
+import { useRouter } from 'vue-router';
+  export default{
+    data(){
+      return{
+          router: useRouter(),
+      }
+    },
+    created(){
+      this.router.push({
+      path: '/main'
+    });
+    }
+  }
 </script>
 
 <template>

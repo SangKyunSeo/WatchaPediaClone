@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.member.dao.ScrabDAO">
+
+    <!-- 스크랩 정보 조회 -->
+    <select id="selectScrab" parameterType="map" resultType="scrabVO">
+        SELECT * FROM scrab
+        WHERE member_num = #{member_num} AND scrab_item_num = #{item_num} AND scrab_item_type = #{scrab_item_type}
+    </select>
+
+    <!-- 보고 싶어요 데이터 삽입 -->
+    <insert id="setWishWatch" parameterType="scrabVO" useGeneratedKeys="true" keyProperty="scrab_num">
+        INSERT INTO scrab (member_num, scrab_item_type, scrab_item_num, scrab_type)
+        VALUES (#{member_num}, #{scrab_item_type}, #{scrab_item_num}, #{scrab_type})
+    </insert>
+
+    <!-- 보고 싶어요 삭제 작업 -->
+    <delete id="deleteWishWatch" parameterType="scrabVO">
+        DELETE FROM scrab WHERE scrab_num = #{scrab_num}
+    </delete>
+
+    <!-- 보고싶어요, 보는중 업데이트 -->
+    <update id="updateScrabType" parameterType="scrabVO">
+        UPDATE scrab SET scrab_type = (scrab_type * (-1)) + 1 WHERE scrab_num = #{scrab_num}
+    </update>
+
+    <!-- 스크랩 정보 조회 -->
+    <select id="selectScrabInfo" parameterType="scrabVO" resultType="scrabVO">
+        SELECT * FROM scrab WHERE scrab_num = #{scrab_num}
+    </select>
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.member.dao.ReviewDAO">
+
+    <!-- 리뷰 정보 조회 -->
+    <select id="getReviewInfo" parameterType="map" resultType="reviewVO">
+        SELECT * FROM review
+        WHERE member_num = #{member_num} AND review_item_type = #{review_item_type} AND review_item_num = #{review_item_num}
+    </select>
+
+    <!-- 리뷰 번호로 리뷰 정보 조회  -->
+    <select id="getReviewInfoByReviewNum" parameterType="integer" resultType="reviewVO">
+        SELECT * FROM review
+        WHERE review_num = #{review_num}
+    </select>
+    <!-- 리뷰 데이터 삽입 -->
+    <insert id="setReview" parameterType="reviewVO" useGeneratedKeys="true" keyProperty="review_num">
+        INSERT review (member_num, review_item_type, review_item_num, review_content, review_score)
+        VALUES (#{member_num}, #{review_item_type}, #{review_item_num}, #{review_content}, #{review_score})
+    </insert>
+
+    <!-- 리뷰 삭제 -->
+    <delete id="deleteReview" parameterType="integer">
+        DELETE FROM review
+        WHERE review_num = #{review_num}
+    </delete>
+
+    <!-- 리뷰 수정 -->
+    <update id="updateReview" parameterType="reviewVO">
+        UPDATE review SET review_content = #{review_content}
+        WHERE review_num = #{review_num}
+    </update>
+
+    <!-- 리뷰 목록들 조회 -->
+    <select id="getReviewList" parameterType="map" resultType="reviewVO">
+        select r.review_num, r.member_num, r.review_item_type, r.review_item_num, r.review_content, r.review_score, m.member_name, i.image_oname, ifnull(s.scrab_type, -1) scrab_type
+        from review r
+        left outer join member m on r.member_num = m.member_num
+        left outer join image i on r.member_num = i.image_item_num and i.image_item_type = 0
+        left outer join scrab s on r.member_num = s.member_num and s.scrab_item_num = #{review_item_num}
+        where r.review_item_type = #{review_item_type}
+        AND r.review_item_num = #{review_item_num};
+    </select>
+
+</mapper>

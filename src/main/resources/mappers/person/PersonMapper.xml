@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.member.dao.PersonDAO">
+
+    <!-- 영화별 출연/감독 조회 -->
+    <select id="selectMovieCast" resultType="movieCastVO" parameterType="integer">
+        SELECT
+            person_item_num, pi.person_num, item_type, item_num, person_item_role, person_name, i.image_url, i.image_oname
+        FROM
+            person_item pi JOIN person p ON pi.person_num = p.person_num
+            JOIN image i ON pi.person_num = i.image_item_num
+        WHERE
+            item_type = 1 AND item_num = #{movie_num} AND i.image_item_type = 3
+    </select>
+
+    <!-- 인물 상세 정보 조회 -->
+    <select id="getPersonDetail" parameterType="integer" resultType="personDetailVO">
+        SELECT p.person_num, p.person_name, p.person_job, p.person_content, i.image_oname FROM person p JOIN image i ON p.person_num = i.image_item_num
+        WHERE i.image_item_type = 3 AND p.person_num = #{person_num}
+    </select>
+
+    <!-- 영화 출연 작품 조회 -->
+    <select id="getPersonMovieList" parameterType="integer" resultType="personMovieVO">
+        SELECT m.movie_num, pp.person_item_role,m.movie_name, YEAR(m.movie_open) movie_open, i.image_oname, ifnull(r.review_avg, 0) review_avg FROM person_item pp
+        JOIN movie m ON pp.item_num = m.movie_num AND pp.item_type = 1
+        JOIN image i ON pp.item_num = i.image_item_num AND i.image_item_type = 1
+        LEFT OUTER JOIN (SELECT review_item_num, avg(review_score) review_avg FROM review WHERE review_item_type = 1 GROUP BY review_item_num) r ON r.review_item_num = pp.item_num
+        WHERE person_num = #{person_num};
+    </select>
+
+    <!-- TV 출연 작품 조회 -->
+    <select id="getPersonTvList" parameterType="integer" resultType="personTvVO">
+        SELECT t.tv_num, pp.person_item_role,t.tv_name, YEAR(t.tv_open) tv_open, i.image_oname, ifnull(r.review_avg, 0) review_avg FROM person_item pp
+        JOIN tv t ON pp.item_num = t.tv_num AND pp.item_type = 2
+        JOIN image i ON pp.item_num = i.image_item_num AND i.image_item_type = 2
+        LEFT OUTER JOIN (SELECT review_item_num, avg(review_score) review_avg FROM review where review_item_type = 2 GROUP BY review_item_num) r ON r.review_item_num = pp.item_num
+        WHERE person_num = #{person_num}
+    </select>
+</mapper>
