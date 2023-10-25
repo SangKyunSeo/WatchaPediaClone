@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# git에 static 파일들 빼고 올리기
+/static/
