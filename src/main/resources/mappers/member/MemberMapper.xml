@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.boot.member.dao.MemberDAO">
 
+    <!-- 회원가입 이메일 중복검사 -->
+    <select id="usedEmailCheck" parameterType="string" resultType="memberVO">
+        SELECT * FROM member WHERE member_email = #{member_email}
+    </select>
     <!-- 회원가입 로직 -->
     <insert id="insertMember" parameterType="memberVO" useGeneratedKeys="true" keyProperty="member_num">
         INSERT INTO member (member_name, member_email, member_pw, member_age, member_gender)

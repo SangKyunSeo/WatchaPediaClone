@@ -47,6 +47,17 @@ public class MemberRestController {
     // 회원가입 처리 로직
     @PostMapping("/register")
     public String register(@RequestParam String member_email, @RequestParam String member_name, @RequestParam String member_pw){
+        log.info("회원가입 처리 API 조회 진입");
+        log.info("파라미터 : member_email = " + member_email + ", member_name = " + member_name + ", member_pw = " + member_pw);
+
+        log.info("이메일 중복 검사 진행");
+        MemberVO db_memberVO = null;
+        db_memberVO = memberService.usedEmailCheck(member_email);
+
+        if(db_memberVO != null){
+            return "used";
+        }
+
         memberService.register(member_email,member_name,member_pw);
         return "success";
     }

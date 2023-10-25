@@ -15,6 +15,7 @@ export default{
   },
   data(){
     return{
+      score: 0,
       movieDetails:{
         movie_num: 0,
         movie_name: '',
@@ -74,7 +75,11 @@ export default{
           image_oname: '',
           scrab_type: -1
         }
-      ]
+      ],
+      reviewAvgScore:{
+        review_avg: 0.0,
+        review_count: 0
+      }
     }
   },
   mounted(){
@@ -82,6 +87,7 @@ export default{
     this.getMovieGenre();
     this.getMovieCast();
     this.getReviewList();
+    this.getReviewAvgScore();
     if(this.loginState == true){
       this.getScrabInfo();
       this.getReview();
@@ -188,7 +194,11 @@ export default{
         alert('로그인이 필요합니다.');
       }else{
         console.log("코멘트 작성 버튼 클릭 이벤트 발생");
-        this.modalActive = true;
+        if(this.score == 0){
+          alert('별점을 등록하고 작성해주세요!');
+        }else{
+          this.modalActive = true;
+        }
       }
     },
     async setReview() {
@@ -200,7 +210,7 @@ export default{
           member_num: this.member_num,
           review_item_type: 1,
           review_item_num: this.$route.params.movie_num,
-          review_score: this.reviewInfo.review_score,
+          review_score: this.score,
           review_content: this.reviewInfo.review_content
         }));
 
@@ -260,6 +270,7 @@ export default{
         if(response.data !== null && response.data !== undefined && response.data !== ''){
           this.reviewInfo = response.data;
           this.isReviewExist = true;
+          this.score = this.reviewInfo.review_score;
         }
       } catch (error){
         console.log("Error : " + error);
@@ -319,7 +330,7 @@ export default{
           member_num: this.member_num,
           review_item_type: 1,
           review_item_num: this.$route.params.movie_num,
-          review_score: this.reviewInfo.review_score,
+          review_score: this.score,
           review_content: this.reviewInfo.review_content,
           review_num: this.reviewInfo.review_num
         }));
@@ -342,6 +353,22 @@ export default{
         }});
         console.log("Response <ReviewList> : " + response.data);
         this.reviewList = response.data;
+      }catch(error){
+        console.log("Error : " + error);
+      }
+    },
+    check(index: number){
+      this.score = index;
+    },
+    async getReviewAvgScore(){
+      try{
+        const response = await instance.get("/getReviewAvgScore",{params:{
+          review_item_type : 1,
+          review_item_num : this.$route.params.movie_num
+        }})
+        console.log("Response <Review Avg Score> : " + response.data);
+        this.reviewAvgScore = response.data;
+        
       }catch(error){
         console.log("Error : " + error);
       }
@@ -379,37 +406,38 @@ export default{
             <section class="section-review">
               <div class="movie-review">
                 <div class="review-star">
-                  <div>
-                    별그림
+                  <div class="star" v-for="index in 5" :key="index" @click="check(index)">
+                    <span v-if="index <= score">★</span>
+                    <span v-if="index > score">☆</span>
                   </div>
                 </div>
                 <div class="review-btn">
                   <div>평가하기</div>
                 </div>
               </div>
+              <div class="movie-review-score-container">
+                <div class="movie-review-score-detail">
+                  <div class="movie-review-real-score">{{ reviewAvgScore.review_avg.toFixed(1) }}</div>
+                  <div class="movie-review-real-content">평균 별점({{ reviewAvgScore.review_count }}명)</div>
+                </div>
+              </div>
               <div class="review-buttons">
                 <button class="wish-watch" @click="wishWatch()" v-if="wishWatchValue == -1">
-                  <div class="wish-btn">+</div>
                   보고싶어요
                 </button>
-                <button class="wish-watch" @click="wishWatch()" v-else style="border-color: pink;">
-                    <div class="wish-btn">+</div>
+                <button class="wish-watch" @click="wishWatch()" v-else style="color: pink;">
                     보고싶어요
                   </button>
                 <button class="write-comment" @click="writeComment()" v-if="!isReviewExist">
-                  <div class="comment-btn">연필</div>
                     코멘트
                 </button>
                 <button class="write-comment" @click="writeComment()" v-else disabled>
-                  <div class="comment-btn">연필</div>
                     코멘트
                 </button>
                 <button class="watching" @click="watching()" v-if="watchingValue == -1">
-                  <div class="watching-btn">눈</div>
                   보는중
                 </button>
-                <button class="watching" @click="watching()" v-else style="border-color: pink;">
-                    <div class="watching-btn">눈</div>
+                <button class="watching" @click="watching()" v-else style="color: pink;">
                     보는중
                   </button>
               </div>
@@ -969,5 +997,69 @@ img{
   letter-spacing: -0.7px;
   line-height: 22px;
   padding: 2px 8px;
+}
+.movie-review{
+  grid-column: 1 / auto;
+}
+.review-star{
+  width: 220px;
+  cursor: pointer;
+  display: flex;
+}
+.star{
+  cursor: pointer;
+}
+.section-review{
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  padding: 0px 0px 20px;
+  -webkit-box-pack: center;
+  justify-content: center;
+  display: grid;
+  row-gap: 20px;
+  -webkit-box-align: center;
+  align-items: center;
+  border-bottom: 1px solid rgb(217, 217, 217);
+}
+.review-btn{
+  text-align: left;
+  margin: 10px 0px 0px 6px;
+  color: rgb(140, 140, 140);
+  font-size: 12px;
+  line-height: 12px;
+}
+.review-btn div{
+  display: inline-block;
+}
+.movie-review-score-detail{
+  display: block;
+  text-align: center;
+}
+.movie-review-real-score{
+  color: rgb(136, 136, 136);
+  margin: 0px 0px 7px;
+  font-size: 36px;
+}
+.movie-review-real-content{
+  color: rgb(140, 140, 140);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.review-buttons{
+  width: 100%;
+  grid-column: 1 / span 2;
+  padding: 20px 0px 0px;
+  justify-content: space-between;
+  border-top: 1px solid rgb(217, 217, 217);
+  display: flex;
+}
+.review-buttons button{
+  background: none;
+  cursor: pointer;
+  border: none;
+}
+.review-buttons button:hover{
+  font-weight: bold;
 }
 </style>

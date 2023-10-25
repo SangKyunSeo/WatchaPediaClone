@@ -1,5 +1,6 @@
 package com.boot.review.dao;
 
+import com.boot.review.vo.ReviewAvgScoreVO;
 import com.boot.review.vo.ReviewVO;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -45,5 +46,10 @@ public class ReviewDAO {
     // 리뷰 목록
     public List<ReviewVO> getReviewList(Map<String, Object> map){
         return sqlSession.selectList("getReviewList", map);
+    }
+
+    // 리뷰 평균 점수
+    public ReviewAvgScoreVO getReviewAvgScore(Map<String, Object> map){
+        return sqlSession.selectOne("getReviewAvgScore", map);
     }
 }

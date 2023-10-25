@@ -1,1 +1,0 @@
-import{d as e,o as a,c as o,b as n,a as s,e as t}from"./index-b68873f1.js";const c=s("h1",null,"로그인이지롱",-1),i=e({__name:"LoginForm",setup(r){return(_,m)=>(a(),o("main",null,[c,n(t)]))}});export{i as default};

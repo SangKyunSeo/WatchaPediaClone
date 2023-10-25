@@ -138,6 +138,233 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <!-- executions 섹션은 npm 명령어 상세내용 추가하는 곳-->
+                <executions>
+                    <execution>
+                        <id>front-end install</id>
+                        <goals><goal>exec</goal></goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments><argument>install</argument></arguments>
+                        </configuration>
+                    </execution>
+                    <!-- npm run build -->
+                    <execution>
+                        <id>front-end build package</id>
+                        <goals><goal>exec</goal></goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>build</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <!-- npm install 명령어 실행-->
+                    <!--<execution>
+                        <id>front-end install</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>install</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    &lt;!&ndash; prepare-package 페이즈 동안 npm run test:unit 실행&ndash;&gt;
+                    <execution>
+                        <id>front-end unit test</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>test:unit</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    &lt;!&ndash; prepare-package 페이즈 동안 npm run build 실행&ndash;&gt;
+                    <execution>
+                        <id>front-end build package</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>build</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    &lt;!&ndash; integration-test 페이즈 동안 npm run test:e2e 실행&ndash;&gt;
+                    <execution>
+                        <id>front-end e2e test</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>integration-test</phase>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>test:e2e</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>-->
+                </executions>
+                <configuration>
+                    <workingDirectory>${basedir}/frontend</workingDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <!-- disc 폴더 에서 html 파일을 /src/main/resources/templates 로 이동-->
+                    <execution>
+                        <id>copy front-end template</id>
+                        <goals><goal>copy-resources</goal></goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <outputDirectory>${basedir}/src/main/resources/static</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>frontend/dist</directory>
+                                    <includes><include>index.html</include></includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <!-- disc 폴더 에서 html 파일을 제외하고 /src/main/resources/static 폴더로 이동-->
+                    <!--<execution>
+                        <id>copy front-end static assets</id>
+                        <goals><goal>copy-resources</goal></goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <outputDirectory>${basedir}/src/main/resources/static</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>frontend/dist</directory>
+                                    <excludes><exclude>index.html</exclude></excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>-->
+                </executions>
+            </plugin>
+            <!-- 프론트앤드 빌드 결과를 src/main/resources에 복사-->
+            <!--<plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    &lt;!&ndash; index.html 파일을 prepare-package 페이즈 동안 src/main/resources/template에 복사&ndash;&gt;
+                    <execution>
+                        <id>copy front-end template</id>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <outputDirectory>${basedir}/src/main/resources/static</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>frontend/dist</directory>
+                                    <includes>
+                                        <include>index.html</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    &lt;!&ndash; static 폴더 전체를 src/main/resources/static 폴더로 복사&ndash;&gt;
+                    <execution>
+                        <id>copy front-end assets</id>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <outputDirectory>${basedir}/src/main/resources/static</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>front-end/dist</directory>
+                                    <excludes>
+                                        <exclude>index.html</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+&lt;!&ndash;                    <execution>&ndash;&gt;
+&lt;!&ndash;                        <id>copy front-end template to target</id>&ndash;&gt;
+&lt;!&ndash;                        <goals>&ndash;&gt;
+&lt;!&ndash;                            <goal>copy-resources</goal>&ndash;&gt;
+&lt;!&ndash;                        </goals>&ndash;&gt;
+&lt;!&ndash;                        <phase>prepare-package</phase>&ndash;&gt;
+&lt;!&ndash;                        <configuration>&ndash;&gt;
+&lt;!&ndash;                            <outputDirectory>${basedir}/target/classes/templates</outputDirectory>&ndash;&gt;
+&lt;!&ndash;                            <resources>&ndash;&gt;
+&lt;!&ndash;                                <resource>&ndash;&gt;
+&lt;!&ndash;                                    <directory>front-end/dist</directory>&ndash;&gt;
+&lt;!&ndash;                                    <includes>&ndash;&gt;
+&lt;!&ndash;                                        <include>index.html</include>&ndash;&gt;
+&lt;!&ndash;                                    </includes>&ndash;&gt;
+&lt;!&ndash;                                </resource>&ndash;&gt;
+&lt;!&ndash;                            </resources>&ndash;&gt;
+&lt;!&ndash;                        </configuration>&ndash;&gt;
+&lt;!&ndash;                    </execution>&ndash;&gt;
+&lt;!&ndash;                    <execution>&ndash;&gt;
+&lt;!&ndash;                        <id>copy front-end assets to target</id>&ndash;&gt;
+&lt;!&ndash;                        <goals>&ndash;&gt;
+&lt;!&ndash;                            <goal>copy-resources</goal>&ndash;&gt;
+&lt;!&ndash;                        </goals>&ndash;&gt;
+&lt;!&ndash;                        <phase>prepare-package</phase>&ndash;&gt;
+&lt;!&ndash;                        <configuration>&ndash;&gt;
+&lt;!&ndash;                            <outputDirectory>${basedir}/target/classes/static</outputDirectory>&ndash;&gt;
+&lt;!&ndash;                            <resources>&ndash;&gt;
+&lt;!&ndash;                                <resource>&ndash;&gt;
+&lt;!&ndash;                                    <directory>front-end/dist</directory>&ndash;&gt;
+&lt;!&ndash;                                    <excludes>&ndash;&gt;
+&lt;!&ndash;                                        <exclude>index.html</exclude>&ndash;&gt;
+&lt;!&ndash;                                    </excludes>&ndash;&gt;
+&lt;!&ndash;                                </resource>&ndash;&gt;
+&lt;!&ndash;                            </resources>&ndash;&gt;
+&lt;!&ndash;                        </configuration>&ndash;&gt;
+&lt;!&ndash;                    </execution>&ndash;&gt;
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${basedir}/src/main/resources/static</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}/src/main/resources/static</directory>
+                            <includes>
+                                <include>index.html</include>
+                            </includes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>-->
+
         </plugins>
     </build>
 

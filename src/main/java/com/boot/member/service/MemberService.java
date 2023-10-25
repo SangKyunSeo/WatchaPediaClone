@@ -26,6 +26,11 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberDAO memberDAO;
 
+
+    // 이메일 중복 검사 처리
+    public MemberVO usedEmailCheck(String member_email){
+        return memberDAO.usedEmailCheck(member_email);
+    }
     // 회원가입 처리
     public void register(String member_email, String member_name, String member_pw){
         MemberVO member = new MemberVO();

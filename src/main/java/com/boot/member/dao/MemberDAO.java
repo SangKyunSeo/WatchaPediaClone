@@ -20,6 +20,13 @@ public class MemberDAO {
     @Autowired
     private SqlSessionTemplate sqlSession;
 
+
+    // 이메일 중복 검사 처리
+    public MemberVO usedEmailCheck(String member_email){
+        log.info("<< 이메일 중복 검사 서비스 진입 >>");
+        return sqlSession.selectOne("usedEmailCheck",member_email);
+    }
+
     // 회원가입 처리
     public void insertMember(MemberVO memberVO){
         log.info("<<MemberDAO>> insertMember parameter : MemberVO = " + memberVO);

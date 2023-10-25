@@ -27,19 +27,24 @@
 
     <!-- 리뷰 수정 -->
     <update id="updateReview" parameterType="reviewVO">
-        UPDATE review SET review_content = #{review_content}
+        UPDATE review SET review_content = #{review_content} , review_score = #{review_score}
         WHERE review_num = #{review_num}
     </update>
 
     <!-- 리뷰 목록들 조회 -->
     <select id="getReviewList" parameterType="map" resultType="reviewVO">
-        select r.review_num, r.member_num, r.review_item_type, r.review_item_num, r.review_content, r.review_score, m.member_name, i.image_oname, ifnull(s.scrab_type, -1) scrab_type
-        from review r
-        left outer join member m on r.member_num = m.member_num
-        left outer join image i on r.member_num = i.image_item_num and i.image_item_type = 0
-        left outer join scrab s on r.member_num = s.member_num and s.scrab_item_num = #{review_item_num}
-        where r.review_item_type = #{review_item_type}
+        SELECT r.review_num, r.member_num, r.review_item_type, r.review_item_num, r.review_content, r.review_score, m.member_name, i.image_oname, ifnull(s.scrab_type, -1) scrab_type
+        FROM review r
+        LEFT OUTER JOIN member m ON r.member_num = m.member_num
+        LEFT OUTER JOIN image i ON r.member_num = i.image_item_num AND i.image_item_type = 0
+        LEFT OUTER JOIN scrab s ON r.member_num = s.member_num AND s.scrab_item_num = #{review_item_num}
+        WHERE r.review_item_type = #{review_item_type}
         AND r.review_item_num = #{review_item_num};
     </select>
 
+    <!-- 리뷰 평균 점수 조회 -->
+    <select id="getReviewAvgScore" parameterType="map" resultType="reviewAvgScoreVO">
+        SELECT AVG(review_score) review_avg, COUNT(*) review_count
+        FROM review WHERE review_item_type = #{review_item_type} AND review_item_num = #{review_item_num};
+    </select>
 </mapper>

@@ -175,18 +175,21 @@ export default{
                 <div class="person-items-tv-role">역할</div>
                 <div class="person-items-tv-score">평가</div>
               </div>
+              
               <a class="person-items-tv-row" :key="i" v-for="(personMovie, i) in personMovieList">
-                <div class="person-items-tv-cols">
-                  <div class="person-items-tv-col-date">{{ personMovie.movie_open }}</div>
-                  <div class="person-items-tv-col-image">
-                    <div>
-                      <img :src="getImageUrl(`${personMovie.image_oname}`)" />
+                <router-link :to="{ name: 'MovieDetail', params: { movie_num: personMovie.movie_num } }" class="movie-items">
+                  <div class="person-items-tv-cols">
+                    <div class="person-items-tv-col-date">{{ personMovie.movie_open }}</div>
+                    <div class="person-items-tv-col-image">
+                      <div>
+                        <img :src="getImageUrl(`${personMovie.image_oname}`)" />
+                      </div>
                     </div>
+                    <div class="person-items-tv-col-title">{{ personMovie.movie_name }}</div>
+                    <div class="person-items-tv-col-role">{{ personMovie.person_item_role }}</div>
+                    <div class="person-items-tv-col-score">{{ personMovie.review_avg }}</div>
                   </div>
-                  <div class="person-items-tv-col-title">{{ personMovie.movie_name }}</div>
-                  <div class="person-items-tv-col-role">{{ personMovie.person_item_role }}</div>
-                  <div class="person-items-tv-col-score">{{ personMovie.review_avg }}</div>
-                </div>
+                </router-link>
               </a>
             </div>
           </div>
