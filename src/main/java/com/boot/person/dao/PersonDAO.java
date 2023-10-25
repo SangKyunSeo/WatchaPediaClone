@@ -1,9 +1,6 @@
 package com.boot.person.dao;
 
-import com.boot.person.vo.MovieCastVO;
-import com.boot.person.vo.PersonDetailVO;
-import com.boot.person.vo.PersonMovieVO;
-import com.boot.person.vo.PersonTvVO;
+import com.boot.person.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +18,14 @@ public class PersonDAO {
     private SqlSessionTemplate sqlSession;
 
     // 영화별 출연/감독 정보 조회
-   public List<MovieCastVO> selectMovieCast(Integer movie_num){
+    public List<MovieCastVO> selectMovieCast(Integer movie_num){
        return sqlSession.selectList("selectMovieCast", movie_num);
-   }
+    }
+
+   // TV별 출연/감독 정보 조회
+    public List<TvCastVO> selectTvCast(Integer tv_num){
+        return sqlSession.selectList("selectTvCast", tv_num);
+    }
 
     // 인물 상세 정보 조회
     public PersonDetailVO getPersonDetail(Integer person_num){

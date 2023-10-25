@@ -42,7 +42,10 @@ export default{
           image_oname: '',
           review_avg: 0.0
         }
-      ]
+      ],
+      loginState: this.$store.getters.getLoginState,
+      member_num: this.$store.getters.getUserNum,
+      personFavCount: 0,
     }
   },
   mounted(){
@@ -99,6 +102,34 @@ export default{
       const path = new URL(`../tvimg/${name}.jpg`, currentURL).href;
       return path;
     },
+    async setPersonFav(){
+
+      if(this.loginState == false){
+        alert('로그인 후 이용 가능합니다!');
+        return;
+      }
+
+      try{
+        const response = await instance.get('/setPersonFav',{params:{
+          person_num : this.$route.params.person_num,
+          member_num : this.member_num
+        }})
+      }catch(error){
+        console.log(error);
+      }
+    },
+    async getPersonFav(){
+      try{
+        const response = await instance.get('/getPersonFav',{params:{
+          person_num : this.$route.params.person_num,
+          fav_item_type : 1  // 인물
+        }})
+
+        this.personFavCount = response.data;
+      }catch(error){
+        console.log(error);
+      }
+    }
   }
 }
 </script>
@@ -129,7 +160,7 @@ export default{
             <div>{{ person.person_content }}</div>
           </div>
           <hr>
-          <button class="person-fav-button">
+          <button class="person-fav-button" @click="setPersonFav()">
             <div>따봉이미지</div>
             <span>좋아요 0명이 이 인물을 좋아합니다.</span>
           </button>

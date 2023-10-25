@@ -2,6 +2,7 @@
 import {useRouter} from 'vue-router';
 import axios from 'axios';
 import { useStore } from 'vuex';
+import instance from '@/axios_interceptor';
 
 //import TheWelcome from '../components/TheWelcome.vue'
 export default{
@@ -24,12 +25,68 @@ export default{
         image_oname: ''
       },
       tvGenreName: '',
-      router: useRouter()
+      router: useRouter(),
+      tvCastList:[{
+        person_item_num: 0,
+        person_num: 0,
+        person_name: 0,
+        person_item_role: '',
+        image_oname: '',
+      }],
+      scrabInfo: {
+        scrab_num: 0,
+        member_num: 0,
+        scrab_item_type: 0,
+        scrab_item_num: 0,
+        scrab_type: -1
+      },
+      reviewInfo: {
+        review_num: 0,
+        member_num: 0,
+        review_item_type: 0,
+        review_item_num: 0,
+        review_content: '',
+        review_score: 0,
+        review_regdate: '',
+      },
+      wishWatchValue: -1,
+      watchingValue: -1,
+      loginState: this.$store.getters.getLoginState,
+      member_num: this.$store.getters.getUserNum,
+      score: 0,
+      isReviewExist: false,
+      modalActive: false,
+      isCommentExist: false,
+      updateModalActive: false,
+      reviewList: [
+        {
+          review_num: 0,
+          member_num: 0,
+          review_item_type: 0,
+          review_item_num: 0,
+          review_content: '',
+          review_score: 0,
+          member_name: '',
+          image_oname: '',
+          scrab_type: -1
+        }
+      ],
+      reviewAvgScore: {
+        review_avg: 0.0,
+        review_count: 0
+      }
     }
   },
   mounted(){
     this.getTvDetail();
     this.getTvGenre();
+    this.getTvCast();
+    this.getReviewList();
+    this.getReviewAvgScore();
+    if (this.loginState == true) {
+      this.getScrabInfo();
+      this.getReview();
+    }
   },
   methods: {
     getTvDetail(){
@@ -56,7 +113,258 @@ export default{
       const currentURL = window.location.href;
       const path = new URL(`../tvimg/${name}.jpg`, currentURL).href;
       return path;
-    },     
+    },
+    getProfileImageUrl(name: string): string {
+      const currentURL = window.location.href;
+      const path = new URL(`../personimg/${name}.jpg`, currentURL).href;
+      return path;
+    },
+    getTvCast(){
+      axios.get('/getTvCast',{params:{
+        tv_num : this.$route.params.tv_num
+      }})
+      .then((result) => {
+        this.tvCastList = result.data;
+      })
+    },
+    async getScrabInfo() {
+      try {
+        const response = await instance.get('/getScrabInfo', {
+          params: {
+            item_num: this.$route.params.tv_num,
+            member_num: this.member_num,
+            scrab_item_type: 2
+          }
+        })
+        console.log("Response: " + response);
+        this.scrabInfo = response.data;
+        if (this.scrabInfo.scrab_type == 0) {
+          this.watchingValue = 1;
+        } else if (this.scrabInfo.scrab_type == 1) {
+          this.wishWatchValue = 1;
+        }
+
+      } catch (error: any) {
+        console.log("Error: " + error);
+      }
+    },
+    async wishWatch() {
+      const accessToken = this.$store.getters.getAccessToken;
+      if (accessToken == '') {
+        alert('로그인이 필요합니다.');
+      } else {
+        try {
+          const response = await instance.get('/setWishWatch', {
+            params: {
+              member_num: this.member_num,
+              scrab_item_type: 2,
+              scrab_item_num: this.$route.params.tv_num,
+              scrab_type: 1
+            }
+          })
+          console.log("Response: " + response);
+          this.scrabInfo = response.data;
+          if (this.scrabInfo.scrab_type == 1 && this.scrabInfo.member_num != 0) {
+            this.wishWatchValue = 1;
+            this.watchingValue = -1;
+          }
+          if (!this.scrabInfo) {
+            this.wishWatchValue = -1;
+          }
+        } catch (error: any) {
+          console.log("Error: " + error);
+        }
+      }
+    },
+    async watching() {
+      const accessToken = this.$store.getters.getAccessToken;
+      if (accessToken == '') {
+        alert('로그인이 필요합니다.');
+      } else {
+        try {
+          const response = await instance.get('/setWishWatch', {
+            params: {
+              member_num: this.member_num,
+              scrab_item_type: 2,
+              scrab_item_num: this.$route.params.tv_num,
+              scrab_type: 0
+            }
+          })
+          console.log("Response: " + response);
+          this.scrabInfo = response.data;
+          if (this.scrabInfo.scrab_type == 0 && this.scrabInfo.member_num != 0) {
+            this.wishWatchValue = -1;
+            this.watchingValue = 1;
+          }
+
+          if (!this.scrabInfo) {
+            this.watchingValue = -1;
+          }
+        } catch (error: any) {
+          console.log("Error: " + error);
+        }
+      }
+    },
+    writeComment() {
+      const accessToken = this.$store.getters.getAccessToken;
+      if (accessToken == '') {
+        alert('로그인이 필요합니다.');
+      } else {
+        console.log("코멘트 작성 버튼 클릭 이벤트 발생");
+        if (this.score == 0) {
+          alert('별점을 등록하고 작성해주세요!');
+        } else {
+          this.modalActive = true;
+        }
+      }
+    },
+    async setReview() {
+      if (this.reviewInfo.review_content == '') {
+        alert('코멘트를 작성하세요!');
+      } else {
+        this.modalActive = true;
+        const reviewVO = JSON.parse(JSON.stringify({
+          member_num: this.member_num,
+          review_item_type: 2,
+          review_item_num: this.$route.params.tv_num,
+          review_score: this.score,
+          review_content: this.reviewInfo.review_content
+        }));
+
+        try {
+          const response = await instance.post('/setReview', reviewVO);
+          this.modalActive = false;
+          this.isCommentExist = true;
+          console.log("Response: " + response);
+          this.reviewInfo = response.data;
+          this.isReviewExist = true;
+        } catch (error) {
+          console.log("Error : " + error);
+        }
+      }
+    },
+    async getReview() {
+      try {
+        const response = await instance.get('/getReviewInfo', {
+          params: {
+            member_num: this.member_num,
+            review_item_type: 2,
+            review_item_num: this.$route.params.tv_num,
+          }
+        })
+
+        console.log("Response : " + response.data);
+
+        if (response.data !== null && response.data !== undefined && response.data !== '') {
+          this.reviewInfo = response.data;
+          this.isReviewExist = true;
+          this.score = this.reviewInfo.review_score;
+        }
+      } catch (error) {
+        console.log("Error : " + error);
+      }
+    },
+    cancleComment() {
+      this.modalActive = false;
+    },
+    textChange() {
+      (this.$refs.textTarget as HTMLInputElement).style.height = 'auto';
+      (this.$refs.textTarget as HTMLInputElement).style.height = (this.$refs.textTarget as HTMLInputElement).scrollHeight + 'px';
+    },
+    async deleteReview() {
+
+      const flag = confirm("정말 삭제하시겠습니까?");
+      if (flag) {
+        try {
+          const response = await instance.get('/deleteReview', {
+            params: {
+              review_num: this.reviewInfo.review_num
+            }
+          })
+          console.log("Response : " + response);
+          if (response.data === true) {
+            alert('코멘트를 성공적으로 삭제했습니다.');
+            this.isReviewExist = false;
+            this.setInitReviewInfo();
+          } else {
+            alert('코멘트 삭제를 실패했습니다.');
+          }
+
+        } catch (error) {
+          console.log("Error : " + error);
+        }
+      }
+    },
+    setInitReviewInfo() {
+      this.reviewInfo.member_num = 0;
+      this.reviewInfo.review_content = '';
+      this.reviewInfo.review_item_num = 0;
+      this.reviewInfo.review_num = 0;
+      this.reviewInfo.review_item_type = 0;
+      this.reviewInfo.review_score = 0;
+      this.reviewInfo.review_regdate = '';
+    },
+    updateComment() {
+      this.updateModalActive = true;
+    },
+    cancleUpdateComment() {
+      this.updateModalActive = false;
+    },
+    async updateReview() {
+      if (this.reviewInfo.review_content == '') {
+        alert('수정할 내용을 입력하세요!');
+      } else {
+        const reviewVO = JSON.parse(JSON.stringify({
+          member_num: this.member_num,
+          review_item_type: 2,
+          review_item_num: this.$route.params.tv_num,
+          review_score: this.score,
+          review_content: this.reviewInfo.review_content,
+          review_num: this.reviewInfo.review_num
+        }));
+
+        try {
+          const response = await instance.post('/updateReview', reviewVO);
+          this.updateModalActive = false;
+          console.log("Response: " + response);
+          this.reviewInfo = response.data;
+        } catch (error) {
+          console.log("Error : " + error);
+        }
+      }
+    },
+    async getReviewList() {
+      try {
+        const response = await instance.get('/getReviewList', {
+          params: {
+            review_item_type: 2,
+            review_item_num: this.$route.params.tv_num
+          }
+        });
+        console.log("Response <ReviewList> : " + response.data);
+        this.reviewList = response.data;
+      } catch (error) {
+        console.log("Error : " + error);
+      }
+    },
+    check(index: number) {
+      this.score = index;
+    },
+    async getReviewAvgScore() {
+      try {
+        const response = await instance.get("/getReviewAvgScore", {
+          params: {
+            review_item_type: 2,
+            review_item_num: this.$route.params.tv_num
+          }
+        })
+        console.log("Response <Review Avg Score> : " + response.data);
+        this.reviewAvgScore = response.data;
+
+      } catch (error) {
+        console.log("Error : " + error);
+      }
+    }
   }
 }
 </script>
@@ -86,41 +394,42 @@ export default{
                 </div>
               </div>
             </div>
-            <!-- <div class="movie-detail-info">
+            <div class="movie-detail-info">
               <section class="section-review">
                 <div class="movie-review">
                   <div class="review-star">
-                    <div>
-                      별그림
+                    <div class="star" v-for="index in 5" :key="index" @click="check(index)">
+                      <span v-if="index <= score">★</span>
+                      <span v-if="index > score">☆</span>
                     </div>
                   </div>
                   <div class="review-btn">
                     <div>평가하기</div>
                   </div>
                 </div>
+                <div class="movie-review-score-container">
+                  <div class="movie-review-score-detail">
+                    <div class="movie-review-real-score">{{ reviewAvgScore.review_avg.toFixed(1) }}</div>
+                    <div class="movie-review-real-content">평균 별점({{ reviewAvgScore.review_count }}명)</div>
+                  </div>
+                </div>
                 <div class="review-buttons">
                   <button class="wish-watch" @click="wishWatch()" v-if="wishWatchValue == -1">
-                    <div class="wish-btn">+</div>
                     보고싶어요
                   </button>
-                  <button class="wish-watch" @click="wishWatch()" v-else style="border-color: pink;">
-                      <div class="wish-btn">+</div>
+                  <button class="wish-watch" @click="wishWatch()" v-else style="color: pink;">
                       보고싶어요
                     </button>
                   <button class="write-comment" @click="writeComment()" v-if="!isReviewExist">
-                    <div class="comment-btn">연필</div>
                       코멘트
                   </button>
                   <button class="write-comment" @click="writeComment()" v-else disabled>
-                    <div class="comment-btn">연필</div>
                       코멘트
                   </button>
                   <button class="watching" @click="watching()" v-if="watchingValue == -1">
-                    <div class="watching-btn">눈</div>
                     보는중
                   </button>
-                  <button class="watching" @click="watching()" v-else style="border-color: pink;">
-                      <div class="watching-btn">눈</div>
+                  <button class="watching" @click="watching()" v-else style="color: pink;">
                       보는중
                     </button>
                 </div>
@@ -173,17 +482,17 @@ export default{
                   </div>
                 </section>
               <section class="section-movie-detail-info">
-                {{ movieDetails.movie_content }}
+                {{ tvDetails.tv_content }}
               </section>
-            </div> -->
+            </div>
           </section>
         </div>
       </div>
-      <!-- <div class="modal-main" v-if="modalActive == true">
+      <div class="modal-main" v-if="modalActive == true">
         <div class="modal-container">
           <div class="modal-content">
             <header>
-              <em>{{ movieDetails.movie_name }}</em>
+              <em>{{ tvDetails.tv_name }}</em>
               <div>
                 <button @click="cancleComment()">취소</button>
               </div>
@@ -199,12 +508,12 @@ export default{
             </div>
           </div>
         </div>
-      </div> -->
-      <!-- <div class="modal-main" v-if="updateModalActive == true">
+      </div>
+      <div class="modal-main" v-if="updateModalActive == true">
           <div class="modal-container">
             <div class="modal-content">
               <header>
-                <em>{{ movieDetails.movie_name }}</em>
+                <em>{{ tvDetails.tv_name }}</em>
                 <div>
                   <button @click="cancleUpdateComment()">취소</button>
                 </div>
@@ -220,22 +529,22 @@ export default{
               </div>
             </div>
           </div>
-        </div> -->
+        </div>
 
-      <!-- <div class="movie-person-comment">
+      <div class="movie-person-comment">
         <section class="movie-persons">
           <div class="person-title">
             <h2>출연/제작</h2>
             <ul class="person-ul">
-              <li class="person-li" :key="i" v-for="(movieCast, i) in movieCastList">
-                <router-link :to="{ name: 'PersonDetail', params: { person_num: movieCast.person_num } }" class="movieCast-details">
+              <li class="person-li" :key="i" v-for="(tvCast, i) in tvCastList">
+                <router-link :to="{ name: 'PersonDetail', params: { person_num: tvCast.person_num } }" class="movieCast-details">
                   <div class="person-profile-image">
-                    <img :src="getProfileImageUrl(`${movieCast.image_oname}`)"/>
+                    <img :src="getProfileImageUrl(`${tvCast.image_oname}`)"/>
                   </div>
                   <div>
                     <div>
-                      <div class="person-name">{{ movieCast.person_name }}</div>
-                      <div class="person-role">{{ movieCast.person_item_role }}</div>
+                      <div class="person-name">{{ tvCast.person_name }}</div>
+                      <div class="person-role">{{ tvCast.person_item_role }}</div>
                     </div>  
                   </div>
                 </router-link>
@@ -295,7 +604,7 @@ export default{
           </ul>
           <div class="comment-main"></div>
         </section>
-      </div> -->
+      </div>
     </main>
 </template>
 <style scoped>
@@ -720,4 +1029,80 @@ img {
   letter-spacing: -0.7px;
   line-height: 22px;
   padding: 2px 8px;
-}</style>
+}
+
+.movie-review {
+  grid-column: 1 / auto;
+}
+
+.review-star {
+  width: 220px;
+  cursor: pointer;
+  display: flex;
+}
+
+.star {
+  cursor: pointer;
+}
+
+.section-review {
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  padding: 0px 0px 20px;
+  -webkit-box-pack: center;
+  justify-content: center;
+  display: grid;
+  row-gap: 20px;
+  -webkit-box-align: center;
+  align-items: center;
+  border-bottom: 1px solid rgb(217, 217, 217);
+}
+
+.review-btn {
+  text-align: left;
+  margin: 10px 0px 0px 6px;
+  color: rgb(140, 140, 140);
+  font-size: 12px;
+  line-height: 12px;
+}
+
+.review-btn div {
+  display: inline-block;
+}
+
+.movie-review-score-detail {
+  display: block;
+  text-align: center;
+}
+
+.movie-review-real-score {
+  color: rgb(136, 136, 136);
+  margin: 0px 0px 7px;
+  font-size: 36px;
+}
+
+.movie-review-real-content {
+  color: rgb(140, 140, 140);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.review-buttons {
+  width: 100%;
+  grid-column: 1 / span 2;
+  padding: 20px 0px 0px;
+  justify-content: space-between;
+  border-top: 1px solid rgb(217, 217, 217);
+  display: flex;
+}
+
+.review-buttons button {
+  background: none;
+  cursor: pointer;
+  border: none;
+}
+
+.review-buttons button:hover {
+  font-weight: bold;
+}
+</style>

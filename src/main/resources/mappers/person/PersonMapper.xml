@@ -13,6 +13,16 @@
             item_type = 1 AND item_num = #{movie_num} AND i.image_item_type = 3
     </select>
 
+    <!-- TV별 출연/감독 조회 -->
+   <select id="selectTvCast" resultType="tvCastVO" parameterType="integer">
+       SELECT
+           person_item_num, pi.person_num, person_name, person_item_role, i.image_oname
+       FROM
+           person_item pi JOIN person p ON pi.person_num = p.person_num
+                          JOIN image i ON pi.person_num = i.image_item_num
+       WHERE
+           item_type = 2 AND item_num = #{tv_num} AND i.image_item_type = 3
+   </select>
     <!-- 인물 상세 정보 조회 -->
     <select id="getPersonDetail" parameterType="integer" resultType="personDetailVO">
         SELECT p.person_num, p.person_name, p.person_job, p.person_content, i.image_oname FROM person p JOIN image i ON p.person_num = i.image_item_num

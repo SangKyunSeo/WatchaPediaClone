@@ -68,12 +68,12 @@ public class MovieRestController {
 
     // 영화 상세 정보 - 로그인 했을 경우 스크랩 정보 조회
     @GetMapping("/getScrabInfo")
-    public ScrabVO getScrabInfo(@RequestParam int movie_num, @RequestParam int member_num, @RequestParam int scrab_item_type){
+    public ScrabVO getScrabInfo(@RequestParam int item_num, @RequestParam int member_num, @RequestParam int scrab_item_type){
         log.info("<< 스크랩 정보 조회 >>");
-        log.info("파라미터 : movie_num = " + movie_num + ", member_num = " + member_num );
+        log.info("파라미터 : item_num = " + item_num + ", member_num = " + member_num );
         ScrabVO scrabVO = null;
         Map<String, Object> map = new HashMap<>();
-        map.put("item_num",movie_num);
+        map.put("item_num",item_num);
         map.put("member_num",member_num);
         map.put("scrab_item_type", scrab_item_type);
         scrabVO = scrabService.selectScrab(map);

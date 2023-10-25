@@ -3,6 +3,8 @@ package com.boot.tv.controller;
 import com.boot.genre.dto.MovieGenreDTO;
 import com.boot.genre.dto.TvGenreDTO;
 import com.boot.genre.service.TvGenreService;
+import com.boot.person.dto.TvCastDTO;
+import com.boot.person.service.PersonService;
 import com.boot.tv.dto.TvDTO;
 import com.boot.tv.service.TvService;
 import com.boot.tv.vo.TvDetailVO;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,6 +25,8 @@ public class TvRestController {
 
     private final TvService tvService;
     private final TvGenreService tvGenreService;
+    private final PersonService personService;
+
     // tv 리스트 출력 API
     @GetMapping("/tvList")
     public List<TvDTO> getTvList(){
@@ -51,6 +56,16 @@ public class TvRestController {
         }
         genreName = genreName.substring(0, genreName.length() - 1);
         return genreName;
+    }
+
+    // tv 출연 / 감독 정보 출력 API
+    @GetMapping("/getTvCast")
+    public List<TvCastDTO> getTvCastList(@RequestParam int tv_num){
+        log.info("<< Tv 출연 / 감독 정보 출력 API 진입 >>");
+        List<TvCastDTO> tvCastDTOList = new ArrayList<>();
+        tvCastDTOList = personService.selectTvCast(tv_num);
+
+        return tvCastDTOList;
     }
 
 }

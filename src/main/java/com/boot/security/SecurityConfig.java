@@ -71,7 +71,8 @@ public class SecurityConfig {
                         "/","/login","/mainMovie","/getMovieInfo",
                         "/movie","/tv","/tvDetail/{tv_num}","/tvList","/tvDetail","/movieDetail","/movieDetail/{movie_num}",
                         "/getMovieGenre","/getTvGenre","/getMovieCast",
-                        "/personDetail/{person_num}","/getReviewList/**","/getReviewAvgScore/**").permitAll().anyRequest().authenticated());
+                        "/personDetail/{person_num}","/getReviewList/**","/getReviewAvgScore/**","/personDetail/**","/getPersonDetail",
+                        "/getPersonMovieList","/getPersonTvList","/getTvCast/**").permitAll().anyRequest().authenticated());
 
         // 세션을 사용하지 않음
         http.sessionManagement((configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)));

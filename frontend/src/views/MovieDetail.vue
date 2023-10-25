@@ -142,7 +142,7 @@ export default{
       try {
         const response = await instance.get('/getScrabInfo', {
           params: {
-            movie_num: this.$route.params.movie_num,
+            item_num: this.$route.params.movie_num,
             member_num: this.member_num,
             scrab_item_type : 1
           }

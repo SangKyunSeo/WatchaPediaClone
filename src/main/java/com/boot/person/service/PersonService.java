@@ -1,14 +1,8 @@
 package com.boot.person.service;
 
 import com.boot.person.dao.PersonDAO;
-import com.boot.person.dto.MovieCastDTO;
-import com.boot.person.dto.PersonDetailDTO;
-import com.boot.person.dto.PersonMovieDTO;
-import com.boot.person.dto.PersonTvDTO;
-import com.boot.person.vo.MovieCastVO;
-import com.boot.person.vo.PersonDetailVO;
-import com.boot.person.vo.PersonMovieVO;
-import com.boot.person.vo.PersonTvVO;
+import com.boot.person.dto.*;
+import com.boot.person.vo.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,6 +29,21 @@ public class PersonService {
         }
 
         return movieCastDTOList;
+    }
+
+    // TV별 출연/감독 정보 조회
+    public List<TvCastDTO> selectTvCast(Integer tv_num){
+        List<TvCastVO> tvCastVOList = personDAO.selectTvCast(tv_num);
+        List<TvCastDTO> tvCastDTOList = new ArrayList<>();
+        log.info("TvCastVOList : " + tvCastDTOList);
+
+        for(TvCastVO vo : tvCastVOList){
+            TvCastDTO tvCastDTO = new TvCastDTO();
+            tvCastDTO = tvCastDTO.voToDto(vo);
+            tvCastDTOList.add(tvCastDTO);
+        }
+
+        return tvCastDTOList;
     }
 
     // 인물 상세 정보 조회
