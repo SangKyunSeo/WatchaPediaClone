@@ -2,13 +2,13 @@ package com.boot.member.dao;
 
 import com.boot.member.dto.MemberRole;
 import com.boot.member.vo.MemberVO;
-import com.boot.security.CustomUserDetails;
+//import com.boot.security.CustomUserDetails;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Mapper;
+//import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+//import org.springframework.jdbc.support.GeneratedKeyHolder;
+//import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

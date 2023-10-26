@@ -1,7 +1,7 @@
 <script lang="ts">
 import {useRouter} from 'vue-router';
-import axios from 'axios';
-import { useStore } from 'vuex';
+// import axios from 'axios';
+// import { useStore } from 'vuex';
 import instance from '@/axios_interceptor';
 
 //import TheWelcome from '../components/TheWelcome.vue'
@@ -46,12 +46,23 @@ export default{
       loginState: this.$store.getters.getLoginState,
       member_num: this.$store.getters.getUserNum,
       personFavCount: 0,
+      Fav:{
+        fav_num: 0,
+        member_num: 0,
+        fav_item_type: 0,
+        fav_item_num: 0
+      },
+      isLiked: false,
     }
   },
   mounted(){
     this.getPersonDetail();
     this.getPersonMovieList();
     this.getPersonTvList();
+    this.getFavTotal();
+    if(this.loginState){
+      this.getMyFavInfo();
+    }
   },
   methods: {
     async getPersonDetail(){
@@ -102,7 +113,22 @@ export default{
       const path = new URL(`../tvimg/${name}.jpg`, currentURL).href;
       return path;
     },
-    async setPersonFav(){
+    async getMyFavInfo(){
+      try{
+        const response = await instance.get('/getMyFavInfo',{params:{
+          member_num: this.member_num,
+          fav_item_num: this.$route.params.person_num,
+          fav_item_type: 1
+        }})
+
+        console.log("Response <getMyPersonFavInfo> : " + response.data);
+        this.isLiked = response.data;
+
+      }catch(error){
+        console.log("Error : " + error);
+      }
+    },
+    async setFav(){
 
       if(this.loginState == false){
         alert('로그인 후 이용 가능합니다!');
@@ -110,24 +136,48 @@ export default{
       }
 
       try{
-        const response = await instance.get('/setPersonFav',{params:{
-          person_num : this.$route.params.person_num,
-          member_num : this.member_num
+        const response = await instance.get('/setFav',{params:{
+          member_num: this.member_num,
+          fav_item_num : this.$route.params.person_num,
+          fav_item_type: 1
         }})
+        console.log('Response : ' + response);
+        this.getFavTotal();
+        this.getMyFavInfo();
+
       }catch(error){
         console.log(error);
       }
     },
-    async getPersonFav(){
+    async getFavTotal(){
       try{
-        const response = await instance.get('/getPersonFav',{params:{
-          person_num : this.$route.params.person_num,
+        const response = await instance.get('/getFavTotal',{params:{
+          fav_item_num : this.$route.params.person_num,
           fav_item_type : 1  // 인물
         }})
 
+        console.log("Response < 좋아요 개수 > : " + response.data);
         this.personFavCount = response.data;
+        
       }catch(error){
         console.log(error);
+      }
+    },
+    async deleteFav(){
+      try{
+        const reponse = await instance.get('/deleteFav',{params:{
+          member_num : this.member_num,
+          fav_item_num : this.$route.params.person_num,
+          fav_item_type : 1
+        }})
+
+        console.log("Response : " + reponse);
+
+        this.isLiked = false;
+        this.getFavTotal();
+        this.getMyFavInfo();
+      }catch(error){
+        console.log("Error : " + error);
       }
     }
   }
@@ -160,10 +210,12 @@ export default{
             <div>{{ person.person_content }}</div>
           </div>
           <hr>
-          <button class="person-fav-button" @click="setPersonFav()">
-            <div>따봉이미지</div>
-            <span>좋아요 0명이 이 인물을 좋아합니다.</span>
+          <button class="person-fav-button" @click="deleteFav()" v-if="isLiked" style="color: pink; font-style: bold;">
+            <span>좋아요 {{ personFavCount }}명이 이 인물을 좋아합니다.</span>
           </button>
+          <button class="person-fav-button" @click="setFav()" v-else>
+              <span>좋아요 {{ personFavCount }}명이 이 인물을 좋아합니다.</span>
+            </button>
         </div>
       </section>
       <hr>

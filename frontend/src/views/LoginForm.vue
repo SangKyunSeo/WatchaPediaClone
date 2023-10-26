@@ -1,7 +1,7 @@
 <script lang="ts">
 import {useRouter} from 'vue-router';
 import axios from 'axios';
-import { useStore } from 'vuex';
+// import { useStore } from 'vuex';
 
 //import TheWelcome from '../components/TheWelcome.vue'
 export default{
@@ -33,8 +33,13 @@ export default{
     login(){
       axios.post('/login', null, { params: {username:this.username, password:this.password}})
       .then((result) => {
+
+        console.log("로그인 결과 : " + result.data);
+
         if(result.data === 'loginError'){
           alert('로그인 실패!');
+          this.username = '';
+          this.password = '';
         }else{
           this.userInfo = {
               member_num: result.data.member_num,

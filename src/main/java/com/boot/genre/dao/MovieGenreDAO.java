@@ -19,6 +19,7 @@ public class MovieGenreDAO {
 
     // 영화 장르 조회
     public List<MovieGenreVO> selectMovieGenre(Integer movie_num){
+        log.info("<< 영화 장르 조회 DAO 진입 >>");
         return sqlSession.selectList("selectMovieGenre", movie_num);
     }
 }

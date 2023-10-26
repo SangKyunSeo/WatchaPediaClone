@@ -2,8 +2,7 @@ package com.boot.tv.dao;
 
 import com.boot.tv.dto.TvDTO;
 import com.boot.tv.vo.TvDetailVO;
-import com.boot.tv.vo.TvVO;
-import lombok.extern.slf4j.Slf4j;
+//import com.boot.tv.vo.TvVO;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -13,7 +12,6 @@ import java.util.List;
 
 @Repository
 @Transactional
-@Slf4j
 public class TvDAO {
 
     @Autowired

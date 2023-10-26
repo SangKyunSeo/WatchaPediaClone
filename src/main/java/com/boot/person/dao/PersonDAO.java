@@ -19,6 +19,7 @@ public class PersonDAO {
 
     // 영화별 출연/감독 정보 조회
     public List<MovieCastVO> selectMovieCast(Integer movie_num){
+        log.info("<< 영화별 출연/감독 정보조회 DAO 진입 >>");
        return sqlSession.selectList("selectMovieCast", movie_num);
     }
 

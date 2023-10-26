@@ -1,6 +1,6 @@
 package com.boot.genre.dao;
 
-import com.boot.genre.vo.MovieGenreVO;
+//import com.boot.genre.vo.MovieGenreVO;
 import com.boot.genre.vo.TvGenreVO;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -18,8 +18,9 @@ public class TvGenreDAO {
     @Autowired
     private SqlSessionTemplate sqlSession;
 
-    // 영화 장르 조회
+    // tv 장르 조회
     public List<TvGenreVO> selectTvGenre(Integer tv_num){
+        log.info("<< tv 장르 조회 DAO 진입 >>");
         return sqlSession.selectList("selectTvGenre", tv_num);
     }
 }

@@ -16,7 +16,9 @@
                                                 <router-link
                                                     :to="{ name: 'MovieDetail', params: { movie_num: movie.movie_num } }"
                                                     class="movie-items">
-                                                    <img :src="getImageUrl(`${movie.image_oname}`)" />
+                                                    <div class="image-box">
+                                                        <img :src="getImageUrl(`${movie.image_oname}`)" />
+                                                    </div>
                                                     <div class="movie-name">{{ movie.movie_name }}</div>
                                                     <div>{{ movie.movie_open }}</div>
                                                 </router-link>
@@ -42,7 +44,9 @@
                                                 <router-link
                                                     :to="{ name: 'MovieDetail', params: { movie_num: movie.movie_num } }"
                                                     class="movie-items">
-                                                    <img :src="getImageUrl(`${movie.image_oname}`)" />
+                                                    <div class="image-box">
+                                                        <img :src="getImageUrl(`${movie.image_oname}`)" />
+                                                    </div>
                                                     <div class="movie-name">{{ movie.movie_name }}</div>
                                                     <div>{{ movie.movie_open }}</div>
                                                 </router-link>
@@ -68,9 +72,12 @@
                                                 <router-link
                                                     :to="{ name: 'MovieDetail', params: { movie_num: movie.movie_num } }"
                                                     class="movie-items">
-                                                    <img :src="getImageUrl(`${movie.image_oname}`)" />
+                                                    <div class="image-box">
+                                                        <img :src="getImageUrl(`${movie.image_oname}`)" />
+                                                    </div>
                                                     <div class="movie-name">{{ movie.movie_name }}</div>
                                                     <div>{{ movie.movie_open }}</div>
+                                                    
                                                 </router-link>
                                             </li>
                                         </ul>
@@ -87,7 +94,7 @@
 <script lang="ts" >
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
+// import { ref } from 'vue';
 
 export default {
     data() {
@@ -131,6 +138,8 @@ export default {
 <style scoped>
 .section-content {
     margin-top: 80px;
+    margin-right: 80px;
+    margin-left: 80px;
 }
 
 .movie-title {
@@ -192,8 +201,23 @@ img {
     overflow: hidden;
 }
 
-.movie-items {
+.movie-items{
     display: inline-block;
     width: 100%;
     cursor: pointer;
-}</style>
+    outline: rgb(0, 0, 0);
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+.movie-items:hover{
+    background-color: white;
+}
+.movie-name{
+    font-size: 12px;
+    overflow: hidden;
+}
+.image-box{
+    border: 1px solid rgb(234, 233, 232);
+    border-radius: 5px;
+}
+</style>

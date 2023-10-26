@@ -3,16 +3,14 @@ package com.boot.tv.service;
 import com.boot.tv.dao.TvDAO;
 import com.boot.tv.dto.TvDTO;
 import com.boot.tv.vo.TvDetailVO;
-import com.boot.tv.vo.TvVO;
+//import com.boot.tv.vo.TvVO;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class TvService {
 
     private final TvDAO tvDAO;

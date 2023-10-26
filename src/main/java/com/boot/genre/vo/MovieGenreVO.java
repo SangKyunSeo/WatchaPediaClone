@@ -1,9 +1,9 @@
 package com.boot.genre.vo;
 
-import com.boot.genre.dto.MovieGenreDTO;
+//import com.boot.genre.dto.MovieGenreDTO;
 import lombok.Data;
 
-import java.sql.Date;
+//import java.sql.Date;
 
 @Data
 public class MovieGenreVO {

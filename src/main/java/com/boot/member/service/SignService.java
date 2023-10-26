@@ -29,6 +29,8 @@ public class SignService {
         MemberVO memberVO = null;
         memberVO = memberDAO.selectMemberByEmail(request.getMember_email());
 
+        log.info("MemberVO = " + memberVO);
+
         if(memberVO == null){
             throw new BadCredentialsException("잘못된 계정 정보!");
         }

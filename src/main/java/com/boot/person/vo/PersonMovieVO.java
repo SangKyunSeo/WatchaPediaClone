@@ -2,7 +2,6 @@ package com.boot.person.vo;
 
 import lombok.Data;
 
-import java.sql.Date;
 
 @Data
 public class PersonMovieVO {

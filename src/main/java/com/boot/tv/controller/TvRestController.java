@@ -1,6 +1,6 @@
 package com.boot.tv.controller;
 
-import com.boot.genre.dto.MovieGenreDTO;
+//import com.boot.genre.dto.MovieGenreDTO;
 import com.boot.genre.dto.TvGenreDTO;
 import com.boot.genre.service.TvGenreService;
 import com.boot.person.dto.TvCastDTO;
@@ -8,7 +8,7 @@ import com.boot.person.service.PersonService;
 import com.boot.tv.dto.TvDTO;
 import com.boot.tv.service.TvService;
 import com.boot.tv.vo.TvDetailVO;
-import com.boot.tv.vo.TvVO;
+//import com.boot.tv.vo.TvVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

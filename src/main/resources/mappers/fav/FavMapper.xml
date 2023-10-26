@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.member.dao.FavDAO">
+
+    <!-- 좋아요 전체 개수 조회 -->
+   <select id="getFavTotal" parameterType="map" resultType="favTotalVO">
+        SELECT COUNT(*) fav_total FROM fav WHERE fav_item_num = #{fav_item_num} AND fav_item_type = #{fav_item_type}
+   </select>
+
+    <!-- 내가 좋아요 누른 정보 -->
+    <select id="getMyFavInfo" parameterType="map" resultType="favVO">
+        SELECT * FROM fav WHERE member_num = #{member_num} AND fav_item_type = #{fav_item_type} AND fav_item_num = #{fav_item_num}
+    </select>
+
+    <!-- 좋아요 데이터 삽입 -->
+    <insert id="setFav" parameterType="favVO" useGeneratedKeys="true" keyProperty="fav_num">
+        INSERT INTO fav (member_num, fav_item_type, fav_item_num)
+        VALUES (#{member_num}, #{fav_item_type}, #{fav_item_num})
+    </insert>
+
+    <!-- 좋아요 데이터 삭제 -->
+    <delete id="deleteFav" parameterType="favVO">
+        DELETE FROM fav
+        WHERE member_num = #{member_num} AND fav_item_type = #{fav_item_type} AND fav_item_num = #{fav_item_num}
+    </delete>
+</mapper>

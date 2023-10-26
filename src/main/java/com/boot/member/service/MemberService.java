@@ -3,7 +3,7 @@ package com.boot.member.service;
 import com.boot.member.dao.MemberDAO;
 import com.boot.member.dto.MemberRole;
 import com.boot.member.vo.MemberVO;
-import com.boot.security.CustomUserDetails;
+//import com.boot.security.CustomUserDetails;
 import com.boot.security.JwtTokenProvider;
 import com.boot.security.TokenInfo;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +13,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
+//import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class MemberService {
-    private CustomUserDetails customUserDetails;
+//    private CustomUserDetails customUserDetails;
     private JwtTokenProvider jwtTokenProvider;
     private AuthenticationManagerBuilder authenticationManagerBuilder;
 

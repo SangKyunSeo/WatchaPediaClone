@@ -2,11 +2,11 @@ package com.boot.main.controller;
 
 import com.boot.movie.dto.MovieDTO;
 import com.boot.movie.service.MovieService;
-import com.boot.movie.vo.MovieVO;
+//import com.boot.movie.vo.MovieVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+//import org.springframework.stereotype.Controller;
+//import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

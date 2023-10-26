@@ -3,7 +3,7 @@ package com.boot.genre.dto;
 import com.boot.genre.vo.MovieGenreVO;
 import lombok.Data;
 
-import java.sql.Date;
+//import java.sql.Date;
 
 @Data
 public class MovieGenreDTO {

@@ -19,6 +19,7 @@ public class MovieGenreService {
 
     // 영화 목록 조회
     public List<MovieGenreDTO> selectMovieGenre(Integer movie_num){
+        log.info("<< 영화 목록 조회 서비스 진입 >>");
         List<MovieGenreVO> movieGenreVOList = movieGenreDAO.selectMovieGenre(movie_num);
         List<MovieGenreDTO> movieGenreDTOList = new ArrayList<>();
 

@@ -1,12 +1,12 @@
 package com.boot.movie.controller;
 
-import com.boot.genre.dao.MovieGenreDAO;
+//import com.boot.genre.dao.MovieGenreDAO;
 import com.boot.genre.dto.MovieGenreDTO;
 import com.boot.genre.service.MovieGenreService;
-import com.boot.movie.dao.MovieDAO;
+//import com.boot.movie.dao.MovieDAO;
 import com.boot.movie.dto.MovieDTO;
 import com.boot.movie.service.MovieService;
-import com.boot.movie.vo.MovieVO;
+//import com.boot.movie.vo.MovieVO;
 import com.boot.person.dto.MovieCastDTO;
 import com.boot.person.service.PersonService;
 import com.boot.review.service.ReviewService;
@@ -15,10 +15,10 @@ import com.boot.scrab.service.ScrabService;
 import com.boot.scrab.vo.ScrabVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
+//import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

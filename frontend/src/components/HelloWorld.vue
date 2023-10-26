@@ -22,10 +22,15 @@ export default {
   },
   methods: {
     login() {
-      axios.get('/loginForm').then((result) => {
+      axios.get('/loginForm').then(() => {
         this.router.push({
           path: '/loginForm'
         })
+      });
+    },
+    register() {
+      this.router.push({
+        path: '/registerForm'
       });
     },
     // logout(){
@@ -90,6 +95,14 @@ export default {
             <button type="button" @click="login()" v-if="checkLoginState == false">로그인</button>
             <button type="button" @click="logout()" v-if="checkLoginState == true">로그아웃</button>
             <!-- <router-link to="/loginForm">로그인</router-link> -->
+          </li>
+          <li class="header-register">
+            <button type="button" @click="register()" v-if="checkLoginState == false">회원가입</button>
+            <a v-if="checkLoginState == true" class="myInfo">
+              <div>
+                <div>내정보</div>
+              </div>
+            </a>
           </li>
         </ul>
       </div>
@@ -157,15 +170,51 @@ ul{
   height: 62px;
   margin: 0 0 0 20px;
 }
-  .header-content{
-    margin: 0 3.5%;
-  }
-  .header-movie{
-    margin: 0 0 0 24px;
-  }
-  .header-tv{
-    margin: 0 0 0 24px;
-  }
+.header-login button{
+  cursor: pointer;
+  background: transparent;
+  color: #74747b;
+  font-size: 14px;
+  padding: 0;
+  border: 0;
+  margin: 15px 0;
+  outline: none 0px;
+}
+.header-login button:hover{
+  font-weight: bold;
+}
+.header-register{
+  display: flex;
+  align-items: center;
+  height: 62px;
+  margin: 0 0 0 20px;
+  list-style: none;
+}
+.header-register button{
+  cursor: pointer;
+  text-align: center;
+  font-weight: 500;
+  border-radius: 6px;
+  width: auto;
+  height: 32px;
+  color: #353535;
+  font-size: 14px;
+  margin: 15px 0;
+  border: 1px solid rgba(116, 116, 123, 0.5);
+  background: transparent;
+}
+.header-register button:hover{
+  font-weight: bold;
+}
+.header-content{
+  margin: 0 3.5%;
+}
+.header-movie{
+  margin: 0 0 0 24px;
+}
+.header-tv{
+  margin: 0 0 0 24px;
+}
 
 .css-header{
   display: flex;
@@ -173,6 +222,12 @@ ul{
   height: 62px;
   -webkit-box-align: center;
   flex-shrink: 0;
+}
+@media (min-width: 1440px){
+  .header-content{
+    margin-right: auto;
+    margin-left: auto;
+  }
 }
 @media (min-width: 1024px) {
   .greetings h1,

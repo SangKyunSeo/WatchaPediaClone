@@ -3,7 +3,6 @@ package com.boot.person.dto;
 import com.boot.person.vo.PersonMovieVO;
 import lombok.Data;
 
-import java.sql.Date;
 
 @Data
 public class PersonMovieDTO {

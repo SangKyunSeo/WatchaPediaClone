@@ -40,11 +40,11 @@ const router = createRouter({
     },
     {
       path: '/movie',
-      name: 'Movie',
+      name: 'MovieMain',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/Movie.vue')
+      component: () => import('../views/MovieMain.vue')
     },
     {
       path: '/loginError',
@@ -65,11 +65,11 @@ const router = createRouter({
     },
     {
       path: '/tv',
-      name: 'Tv',
+      name: 'TvMain',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/Tv.vue'),
+      component: () => import('../views/TvMain.vue'),
     },
     {
       path: '/tvDetail/:tv_num',

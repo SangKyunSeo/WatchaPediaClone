@@ -1,7 +1,7 @@
 <script lang="ts">
 import {useRouter} from 'vue-router';
 import axios from 'axios';
-import { useStore } from 'vuex';
+// import { useStore } from 'vuex';
 import instance from '@/axios_interceptor';
 
 //import TheWelcome from '../components/TheWelcome.vue'

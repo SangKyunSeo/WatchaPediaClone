@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +19,7 @@ public class ReviewDAO {
 
     // 리뷰 목록 조회
     public ReviewVO getReviewInfo(Map<String, Object> map){
+        log.info("<< 리뷰 목록 조회 DAO 진입 >>");
         return sqlSession.selectOne("getReviewInfo", map);
     }
 

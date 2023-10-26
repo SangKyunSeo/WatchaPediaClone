@@ -8,8 +8,10 @@ import com.boot.member.vo.MemberVO;
 import com.boot.security.TokenInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+//import org.springframework.http.HttpStatus;
+//import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+//import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,6 +28,9 @@ public class MemberRestController {
         log.info("username: " + username);
         String member_email = username;
         String member_pw = password;
+
+        log.info("Member_email = " + member_email + ", member_pw = " + member_pw);
+
         MemberVO memberVO = memberService.selectMemberInfoForLogin(username);
         SignRequest signRequest = new SignRequest();
 
@@ -39,7 +44,7 @@ public class MemberRestController {
     }
 
     // 로그인 에러 처리 로직
-    @GetMapping("/loginError")
+    @ExceptionHandler(BadCredentialsException.class)
     public String loginError(){
         return "loginError";
     }
@@ -48,6 +53,7 @@ public class MemberRestController {
     @PostMapping("/register")
     public String register(@RequestParam String member_email, @RequestParam String member_name, @RequestParam String member_pw){
         log.info("회원가입 처리 API 조회 진입");
+
         log.info("파라미터 : member_email = " + member_email + ", member_name = " + member_name + ", member_pw = " + member_pw);
 
         log.info("이메일 중복 검사 진행");

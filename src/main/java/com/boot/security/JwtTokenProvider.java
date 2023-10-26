@@ -9,15 +9,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+//import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
+//import java.util.Arrays;
+//import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class JwtTokenProvider {
     private final Key key;
-    private static int ONE_DAY = 24*60*60*1000;
+//    private static int ONE_DAY = 24*60*60*1000;
     private static int THREE_MINUTES = 60 * 30 * 1000;
     private static int ONE_HOUR = 60 * 60 * 1000 * 24 * 7;
     private final UserDetailsService customUserDetailsService;

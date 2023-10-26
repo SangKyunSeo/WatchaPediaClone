@@ -1,9 +1,9 @@
 package com.boot.movie.dao;
 
-import com.boot.member.dto.MemberRole;
-import com.boot.member.vo.MemberVO;
+//import com.boot.member.dto.MemberRole;
+//import com.boot.member.vo.MemberVO;
 import com.boot.movie.dto.MovieDTO;
-import com.boot.movie.vo.MovieVO;
+//import com.boot.movie.vo.MovieVO;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +22,7 @@ public class MovieDAO {
 
     // 영화 목록 조회
     public List<MovieDTO> selectMovieList(){
+        log.info("<< 영화 목록 조회 DAO 진입 >>");
         return sqlSession.selectList("selectMovieList");
     }
 

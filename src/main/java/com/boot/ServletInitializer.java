@@ -1,6 +1,6 @@
 package com.boot;
 
-import com.boot.PediaApplication;
+//import com.boot.PediaApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 

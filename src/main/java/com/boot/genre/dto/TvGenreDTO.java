@@ -1,6 +1,6 @@
 package com.boot.genre.dto;
 
-import com.boot.genre.vo.MovieGenreVO;
+//import com.boot.genre.vo.MovieGenreVO;
 import com.boot.genre.vo.TvGenreVO;
 import lombok.Data;
 

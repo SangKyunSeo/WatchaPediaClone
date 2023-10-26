@@ -14,7 +14,9 @@
                                         <ul>
                                             <li :key="i" v-for="(movie, i) in movieDTOList">
                                                 <router-link :to="{name: 'MovieDetail', params:{movie_num : movie.movie_num}}" class="movie-items">
-                                                    <img :src="getImageUrl(`${movie.image_oname}`)" v-if="movie.image_oname"/>
+                                                    <div class="image-box">
+                                                        <img :src="getImageUrl(`${movie.image_oname}`)" v-if="movie.image_oname"/>
+                                                    </div>
                                                     <div class="movie-name">{{ movie.movie_name }}</div>
                                                     <div>{{ movie.movie_open }}</div>
                                                 </router-link>
@@ -38,7 +40,9 @@
                                         <ul>
                                             <li :key="i" v-for="(movie, i) in movieDTOList">
                                                 <router-link :to="{ name: 'MovieDetail', params: { movie_num: movie.movie_num } }" class="movie-items">
-                                                    <img :src="getImageUrl(`${movie.image_oname}`)" v-if="movie.image_oname"/>
+                                                    <div class="image-box">
+                                                        <img :src="getImageUrl(`${movie.image_oname}`)" v-if="movie.image_oname"/>
+                                                    </div>
                                                     <div class="movie-name">{{ movie.movie_name }}</div>
                                                     <div>{{ movie.movie_open }}</div>
                                                 </router-link>
@@ -62,7 +66,9 @@
                                         <ul>
                                             <li :key="i" v-for="(movie, i) in movieDTOList">
                                                 <router-link :to="{ name: 'MovieDetail', params: { movie_num: movie.movie_num } }" class="movie-items">
-                                                    <img :src="getImageUrl(`${movie.image_oname}`)" v-if="movie.image_oname"/>
+                                                    <div class="image-box">
+                                                        <img :src="getImageUrl(`${movie.image_oname}`)" v-if="movie.image_oname"/>
+                                                    </div>
                                                     <div class="movie-name">{{ movie.movie_name }}</div>
                                                     <div>{{ movie.movie_open }}</div>
                                                 </router-link>
@@ -74,15 +80,50 @@
                         </div>
                     </div>
                 </div>
+                <!-- 이미지 슬라이드 예시 -->
+                <div class="movie-container">
+                    <div class="movie-title">
+                        <p>넷플릭스 영화 순위</p>
+                    </div>
+                    <div class="movie-content">
+                        <div class="movie-child1">
+                            <div class="movie-child2">
+                                <div class="movie-child3">
+                                    <div class="image-slider" slideWidth="100%">
+                                        <carousel :items-to-show="5" :wrapAround="true" :autoplay="5000">
+                                            <slide :key="i" v-for="(movie, i) in movieDTOList">
+                                                <router-link :to="{ name: 'MovieDetail', params: { movie_num: movie.movie_num } }" class="movie-items">
+                                                    <div class="image-box">
+                                                        <img :src="getImageUrl(`${movie.image_oname}`)" v-if="movie.image_oname"/>
+                                                    </div>
+                                                    <div class="movie-name">{{ movie.movie_name }}</div>
+                                                    <div>{{ movie.movie_open }}</div>
+                                                </router-link>
+                                            </slide>
+                                            <template #addons>
+                                                <navigation />
+                                                <pagination />
+                                            </template>
+                                        </carousel>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
     </section>
 
 </template>
+
 <script lang="ts" >
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
+import 'vue3-carousel/dist/carousel.css'
+import { Carousel, Slide, Pagination, Navigation} from 'vue3-carousel'
+
+// import { ref } from 'vue';
 
     export default {
     data() {
@@ -100,6 +141,12 @@ import { ref } from 'vue';
             ],
             router: useRouter(),
         }
+    },
+    components: {
+        Carousel,
+        Slide,
+        Pagination,
+        Navigation
     },
     mounted() {
         this.selectMovieList();
@@ -124,8 +171,13 @@ import { ref } from 'vue';
 </script>
 
 <style scoped>
+.carousel__next{
+    right: -21px;
+}
 .section-content{
     margin-top: 80px;
+    margin-right: 80px;
+    margin-left: 80px;
 }
 .movie-title{
     white-space: nowrap;
@@ -183,5 +235,19 @@ img{
     display: inline-block;
     width: 100%;
     cursor: pointer;
+    outline: rgb(0, 0, 0);
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+.movie-items:hover{
+    background-color: white;
+}
+.movie-name{
+    font-size: 12px;
+    overflow: hidden;
+}
+.image-box{
+    border: 1px solid rgb(234, 233, 232);
+    border-radius: 5px;
 }
 </style>
