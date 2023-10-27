@@ -590,13 +590,13 @@ export default{
                 </div>
               </div>
               <div class="comments-content">
-                <a>
+                <router-link :to = "{ name: 'ReviewDetail', params: { reviewNum:  review.review_num as number, reviewItemType: review.review_item_type as number } }">
                   <div>
                     <div>
                       {{ review.review_content }}
                     </div>
                   </div>
-                </a>
+                </router-link>
               </div>
               <div class="comments-fav-info">
                 <span class="comments-fav-img"></span>

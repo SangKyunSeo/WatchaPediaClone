@@ -55,6 +55,9 @@ export default {
         console.log("Response: " + response);
         this.$store.commit('successLogout');
         localStorage.clear;
+        this.router.push({
+          path: '/main'
+        })
       }catch(error: any){
         console.log("Error: " + error);
       }
