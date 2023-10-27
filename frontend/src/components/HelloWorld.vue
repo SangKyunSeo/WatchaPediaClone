@@ -22,11 +22,14 @@ export default {
   },
   methods: {
     login() {
-      axios.get('/loginForm').then(() => {
-        this.router.push({
-          path: '/loginForm'
-        })
-      });
+      // axios.get('/loginForm').then(() => {
+      //   this.router.push({
+      //     path: '/loginForm'
+      //   })
+      // });
+      this.router.push({
+        path: '/loginForm'
+      })
     },
     register() {
       this.router.push({
@@ -48,7 +51,7 @@ export default {
     // },
     async logout() {
       try{
-        const response = await instance.get('/logout')
+        const response = await instance.get('/api/logout')
         console.log("Response: " + response);
         this.$store.commit('successLogout');
         localStorage.clear;

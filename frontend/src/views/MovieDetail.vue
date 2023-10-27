@@ -99,7 +99,7 @@ export default{
   },
   methods: {
     getMovieDetail(){
-      axios.get('/getMovieInfo',{
+      axios.get('/api/getMovieInfo',{
         params:{
         movie_num: this.$route.params.movie_num
       }})
@@ -109,7 +109,7 @@ export default{
       })
     },
     getMovieGenre(){
-      axios.get('/getMovieGenre',{
+      axios.get('/api/getMovieGenre',{
         params:{
           movie_num: this.$route.params.movie_num
         }
@@ -119,7 +119,7 @@ export default{
       })
     },
     getMovieCast(){
-      axios.get('/getMovieCast',{
+      axios.get('/api/getMovieCast',{
         params: {
           movie_num: this.$route.params.movie_num
         }
@@ -140,7 +140,7 @@ export default{
     },
     async getScrabInfo(){
       try {
-        const response = await instance.get('/getScrabInfo', {
+        const response = await instance.get('/api/getScrabInfo', {
           params: {
             item_num: this.$route.params.movie_num,
             member_num: this.member_num,
@@ -166,7 +166,7 @@ export default{
         alert('로그인이 필요합니다.');
       }else{
         try {
-          const response = await instance.get('/setWishWatch',{
+          const response = await instance.get('/api/setWishWatch',{
             params:{
               member_num: this.member_num,
               scrab_item_type: 1,
@@ -215,7 +215,7 @@ export default{
         }));
 
         try {
-          const response = await instance.post('/setReview', reviewVO);
+          const response = await instance.post('/api/setReview', reviewVO);
           this.modalActive = false;
           this.isCommentExist = true;
           console.log("Response: " + response);
@@ -232,7 +232,7 @@ export default{
         alert('로그인이 필요합니다.');
       } else {
         try {
-          const response = await instance.get('/setWishWatch', {
+          const response = await instance.get('/api/setWishWatch', {
             params: {
               member_num: this.member_num,
               scrab_item_type: 1,
@@ -257,7 +257,7 @@ export default{
     },
     async getReview(){
       try{
-        const response = await instance.get('/getReviewInfo',{
+        const response = await instance.get('/api/getReviewInfo',{
           params: {
             member_num: this.member_num,
             review_item_type: 1,
@@ -288,7 +288,7 @@ export default{
       const flag = confirm("정말 삭제하시겠습니까?");
       if(flag){
         try {
-          const response = await instance.get('/deleteReview', {
+          const response = await instance.get('/api/deleteReview', {
             params: {
               review_num : this.reviewInfo.review_num
             }
@@ -336,7 +336,7 @@ export default{
         }));
         
         try{
-          const response = await instance.post('/updateReview', reviewVO);
+          const response = await instance.post('/api/updateReview', reviewVO);
           this.updateModalActive = false;
           console.log("Response: " + response);
           this.reviewInfo = response.data;
@@ -347,7 +347,7 @@ export default{
     },
     async getReviewList(){
       try{
-        const response = await instance.get('/getReviewList',{params:{
+        const response = await instance.get('/api/getReviewList',{params:{
           review_item_type : 1,
           review_item_num : this.$route.params.movie_num
         }});
@@ -362,7 +362,7 @@ export default{
     },
     async getReviewAvgScore(){
       try{
-        const response = await instance.get("/getReviewAvgScore",{params:{
+        const response = await instance.get("/api/getReviewAvgScore",{params:{
           review_item_type : 1,
           review_item_num : this.$route.params.movie_num
         }})

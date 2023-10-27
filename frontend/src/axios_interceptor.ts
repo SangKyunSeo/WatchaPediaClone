@@ -2,8 +2,7 @@ import axios from 'axios'
 import {store} from './store'
 import { type InternalAxiosRequestConfig } from 'axios'
 
-
-const BASE_URL = 'http://localhost:8020';
+const BASE_URL = 'http://localhost:5173';
 
 const instance = axios.create({
     baseURL: BASE_URL,
@@ -50,7 +49,7 @@ instance.interceptors.response.use(
             if(error.response.data === 'EXPIRED_TOKEN'){
                 const originalRequest = config;
                 const refreshToken = store.getters.getRefreshToken;
-                const {data} = await axios.post(BASE_URL+'/refreshToken',
+                const {data} = await axios.post(BASE_URL+'/api/refreshToken',
                     {}, {
                         headers: {Authorization: `Bearer ${refreshToken}`},
                         params: {member_email: store.getters.getUserEmail,member_pw: store.getters.getUserPassword}

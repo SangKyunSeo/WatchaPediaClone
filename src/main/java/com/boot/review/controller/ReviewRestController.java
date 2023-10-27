@@ -14,6 +14,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/api")
 public class ReviewRestController {
 
     private final ReviewService reviewService;

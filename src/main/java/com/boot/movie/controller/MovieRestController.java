@@ -26,6 +26,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/api")
 public class MovieRestController {
 
     private final MovieService movieService;

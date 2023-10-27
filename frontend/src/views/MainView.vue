@@ -5,6 +5,11 @@
                 <div class="movie-container">
                     <div class="movie-title">
                         <p>박스오피스 순위</p>
+                        <!-- 서버 분리 테스트 -->
+                        <div>
+                            이렇게 새로고침 하면 업데이트가 바로 되나요?
+                            안되잖아
+                        </div>
                     </div>
                     <div class="movie-content">
                         <div class="movie-child1">
@@ -112,12 +117,13 @@
                     </div>
                 </div>
             </section>
+            
         </div>
     </section>
 
 </template>
 
-<script lang="ts" >
+<script lang="ts">
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import 'vue3-carousel/dist/carousel.css'
@@ -153,7 +159,7 @@ import { Carousel, Slide, Pagination, Navigation} from 'vue3-carousel'
     },
     methods: {
         selectMovieList() {
-            axios.get('/mainMovie')
+            axios.get('/api/mainMovie')
                 .then((result) => {
                     this.movieDTOList = result.data;
                 })

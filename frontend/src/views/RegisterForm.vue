@@ -27,7 +27,7 @@ export default {
                 return;
             }
 
-            axios.post('http://localhost:8020/register', null, {params: {member_email: this.member_email, member_name: this.member_name, member_pw: this.member_pw}})
+            axios.post('/api/register', null, {params: {member_email: this.member_email, member_name: this.member_name, member_pw: this.member_pw}})
             .then((result) => {
                 if(result.data === 'success' ){
                     alert('회원가입 성공!');

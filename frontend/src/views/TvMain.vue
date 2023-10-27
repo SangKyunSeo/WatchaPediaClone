@@ -117,7 +117,7 @@ export default {
     },
     methods: {
         selectTvList() {
-            axios.get('/tvList')
+            axios.get('/api/tvList')
                 .then((result) => {
                     this.tvDTOList = result.data;
                 })

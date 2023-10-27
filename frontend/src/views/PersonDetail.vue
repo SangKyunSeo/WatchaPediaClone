@@ -67,7 +67,7 @@ export default{
   methods: {
     async getPersonDetail(){
       try{
-        const response = await instance.get("/getPersonDetail",{params:{
+        const response = await instance.get("/api/getPersonDetail",{params:{
           person_num : this.$route.params.person_num
         }})
 
@@ -79,7 +79,7 @@ export default{
     },
     async getPersonMovieList(){
       try{
-        const response = await instance.get("/getPersonMovieList",{params:{
+        const response = await instance.get("/api/getPersonMovieList",{params:{
           person_num : this.$route.params.person_num
         }})
 
@@ -93,7 +93,7 @@ export default{
     },
     async getPersonTvList(){
       try{
-        const response = await instance.get("/getPersonTvList",{params:{
+        const response = await instance.get("/api/getPersonTvList",{params:{
           person_num : this.$route.params.person_num
         }})
 
@@ -115,7 +115,7 @@ export default{
     },
     async getMyFavInfo(){
       try{
-        const response = await instance.get('/getMyFavInfo',{params:{
+        const response = await instance.get('/api/getMyFavInfo',{params:{
           member_num: this.member_num,
           fav_item_num: this.$route.params.person_num,
           fav_item_type: 1
@@ -136,7 +136,7 @@ export default{
       }
 
       try{
-        const response = await instance.get('/setFav',{params:{
+        const response = await instance.get('/api/setFav',{params:{
           member_num: this.member_num,
           fav_item_num : this.$route.params.person_num,
           fav_item_type: 1
@@ -151,7 +151,7 @@ export default{
     },
     async getFavTotal(){
       try{
-        const response = await instance.get('/getFavTotal',{params:{
+        const response = await instance.get('/api/getFavTotal',{params:{
           fav_item_num : this.$route.params.person_num,
           fav_item_type : 1  // 인물
         }})
@@ -165,7 +165,7 @@ export default{
     },
     async deleteFav(){
       try{
-        const reponse = await instance.get('/deleteFav',{params:{
+        const reponse = await instance.get('/api/deleteFav',{params:{
           member_num : this.member_num,
           fav_item_num : this.$route.params.person_num,
           fav_item_type : 1

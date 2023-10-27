@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/api")
+@CrossOrigin(origins="*", allowedHeaders = "*")
 public class MemberRestController {
 
     private final MemberService memberService;

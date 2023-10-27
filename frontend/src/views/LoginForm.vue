@@ -31,7 +31,7 @@ export default{
       });
     },
     login(){
-      axios.post('/login', null, { params: {username:this.username, password:this.password}})
+      axios.post('/api/login', null, { params: {username:this.username, password:this.password}})
       .then((result) => {
 
         console.log("로그인 결과 : " + result.data);

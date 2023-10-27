@@ -118,7 +118,7 @@ export default {
     },
     methods: {
         selectMovieList() {
-            axios.get('/mainMovie')
+            axios.get('/api/mainMovie')
                 .then((result) => {
                     this.movieDTOList = result.data;
                 })
