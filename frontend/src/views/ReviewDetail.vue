@@ -1,12 +1,10 @@
 <template>
     <div>리뷰 상세 페이지</div>
     <br>
-    <div>
-        <h2>{{ reviewNum }}</h2>
-        <h2>{{ reviewItemType }}</h2>
+    <section class="preview-wrapper">
+        <Preview v-if="reviewPreview" :reviewPreview="reviewPreview"/>
         
-        <Preview />
-    </div>
+    </section>
 </template>
 
 <script setup lang="ts">
@@ -24,58 +22,65 @@ interface reviewPreviewType{
     reviewItemNum: number,
     reviewContent: string,
     reviewScore: number,
-    reviewRegDate: string,
+    reviewRegdate: string,
     memberNum: number,
     memberName: string,
     movieName: string,
     movieOpen: string,
-    imageOname: string
+    imageOname: string,
+    scrabType: number
 }
 
 const route: RouteLocationNormalizedLoaded = useRoute();
 const reviewNum: Ref<number | null> = ref(0);
 const reviewItemType: Ref<Number | null> = ref(0);
-
+const reviewItemNum: Ref<Number | null> = ref(0);
 
 onMounted(()=>{
     reviewNum.value = Number(route.params.reviewNum);
     reviewItemType.value = Number(route.params.reviewItemType);
+    reviewItemNum.value = Number(route.params.reviewItemNum);
+    getReviewPreview();
 });
 
-let reviewPreview: reviewPreviewType = {
-    reviewNum: 0,
-    reviewItemType: 0,
-    reviewItemNum: 0,
-    reviewContent: '',
-    reviewScore: 0,
-    reviewRegDate: '',
-    memberNum: 0,
-    memberName: '',
-    movieName: '',
-    movieOpen: '',
-    imageOname: ''
-}
+const reviewPreview: Ref<reviewPreviewType | null> = ref({
+        reviewNum: 0,
+        reviewItemType: 0,
+        reviewItemNum: 0,
+        reviewContent: '',
+        reviewScore: 0,
+        reviewRegdate: '',
+        memberNum: 0,
+        memberName: '',
+        movieName: '',
+        movieOpen: '',
+        imageOname: '',
+        scrabType: 0
+});
 
-async function getReviewPreview(reviewNum: number, reviewItemType: number){
+async function getReviewPreview(){
     try{
         const response = await instance.get('/api/getReviewPreview', {
             params: {
-                reviewNum: reviewNum,
-                reviewItemType: reviewItemType
+                reviewNum: reviewNum.value,
+                reviewItemType: reviewItemType.value,
+                reviewItemNum: reviewItemNum.value
             }
         })
 
         console.log("Response : " + response.data);
-        reviewPreview = response.data;
-
+        reviewPreview.value = response.data;
+        
+        console.log("[ReviewPreview] : " + reviewPreview.value);
     }catch(error){
         console.log("Error : " + error);
     }
-    
 }
-
-
 </script>
 <style scoped>
+.preview-wrapper{
+    padding-top: 62px;
+    padding-bottom: unset;
+}
 
 </style>

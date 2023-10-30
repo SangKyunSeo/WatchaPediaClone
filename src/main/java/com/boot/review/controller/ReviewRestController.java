@@ -2,6 +2,7 @@ package com.boot.review.controller;
 
 import com.boot.review.service.ReviewService;
 import com.boot.review.vo.ReviewAvgScoreVO;
+import com.boot.review.vo.ReviewPreviewVO;
 import com.boot.review.vo.ReviewVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -89,5 +90,23 @@ public class ReviewRestController {
         log.info("[[ API 결과 ]] : ReviewAvgScoreVO = " + reviewAvgScoreVO);
 
         return reviewAvgScoreVO;
+    }
+
+    // 리뷰 프리뷰 정보 조회 API
+    @GetMapping("/getReviewPreview")
+    public ReviewPreviewVO getReviewPreview(@RequestParam int reviewNum, @RequestParam int reviewItemType, @RequestParam int reviewItemNum){
+
+        log.info("<< 리뷰 프리뷰 정보 조회 API 진입 >>");
+        log.info("파라미터 : reviewNum = " + reviewNum + ", reviewItemType = " + reviewItemType + ", reviewItemNum = " + reviewItemNum);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("reviewNum", reviewNum);
+        map.put("reviewItemType", reviewItemType);
+        map.put("reviewItemNum", reviewItemNum);
+
+        ReviewPreviewVO reviewPreviewVO = reviewService.getReviewPreview(map);
+
+        log.info("[[ API 결과 ]] : ReviewPreviewVO = " + reviewPreviewVO);
+        return reviewPreviewVO;
     }
 }

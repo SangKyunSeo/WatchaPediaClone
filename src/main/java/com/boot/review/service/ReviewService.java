@@ -2,6 +2,7 @@ package com.boot.review.service;
 
 import com.boot.review.dao.ReviewDAO;
 import com.boot.review.vo.ReviewAvgScoreVO;
+import com.boot.review.vo.ReviewPreviewVO;
 import com.boot.review.vo.ReviewVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,5 +60,11 @@ public class ReviewService {
     public ReviewAvgScoreVO getReviewAvgScore(Map<String, Object> map){
         log.info("<< 리뷰 평균 점수 조회 서비스 진입 >>");
         return reviewDAO.getReviewAvgScore(map);
+    }
+
+    // 리뷰 프리뷰 정보 조회
+    public ReviewPreviewVO getReviewPreview(Map<String, Object> map){
+        log.info("<< 리뷰 프리뷰 정보 조회 서비스 진입 >>");
+        return reviewDAO.getReviewPreview(map);
     }
 }

@@ -47,4 +47,18 @@
         SELECT AVG(review_score) review_avg, COUNT(*) review_count
         FROM review WHERE review_item_type = #{review_item_type} AND review_item_num = #{review_item_num};
     </select>
+
+    <!-- 리뷰 프리뷰 정보 조회 -->
+    <select id="getReviewPreview" parameterType="map" resultType="reviewPreviewVO">
+        SELECT
+            r.review_num reviewNum, me.member_num memberNum, r.review_item_type reviewItemType, r.review_item_num reviewItemNum, r.review_content reviewContent,
+            r.review_score reviewScore, r.review_regdate reviewRegdate,
+            m.movie_name movieName, m.movie_open movieOpen, me.member_name memberName, i.image_oname imageOname, IFNULL(s.scrab_type, -1) scrabType
+        FROM review r
+        JOIN movie m ON r.review_item_num = m.movie_num
+        JOIN member me ON r.member_num = me.member_num
+        JOIN image i ON m.movie_num = i.image_item_num AND i.image_item_type = #{reviewItemType}
+        LEFT JOIN scrab s ON r.member_num = s.member_num AND s.scrab_item_type = #{reviewItemType} AND s.scrab_item_num = #{reviewItemNum}
+        WHERE r.review_num = #{reviewNum}
+    </select>
 </mapper>

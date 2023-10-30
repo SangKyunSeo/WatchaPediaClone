@@ -89,7 +89,7 @@ public class SecurityConfig {
                         "/api/getMovieGenre","/api/getTvGenre","/api/getMovieCast",
                         "/personDetail/{person_num}","/api/getReviewList/**","/api/getReviewAvgScore/**","/api/personDetail/**","/api/getPersonDetail",
                         "/api/getPersonMovieList","/api/getPersonTvList","/api/getTvCast/**",
-                        "/api/getFavTotal").permitAll().anyRequest().authenticated());
+                        "/api/getFavTotal","/api/getReviewPreview").permitAll().anyRequest().authenticated());
 
         // 세션을 사용하지 않음
         http.sessionManagement((configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)));

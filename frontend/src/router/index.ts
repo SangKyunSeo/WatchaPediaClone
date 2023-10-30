@@ -90,7 +90,7 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/reviewDetail/:reviewNum/:reviewItemType',
+      path: '/reviewDetail/:reviewNum/:reviewItemType/:reviewItemNum',
       name: 'ReviewDetail',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route

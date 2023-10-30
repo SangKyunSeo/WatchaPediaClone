@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.reple.dao.RepleDAO">
+
+
+    <!-- 리뷰 작성 여부 확인 -->
+    <select id="isWriteBefore" parameterType="repleSetVO" resultType="integer">
+        SELECT COUNT(*) FROM review_reple WHERE review_num = #{reviewNum} AND member_num = #{memberNum}
+    </select>
+    <!-- 리뷰 댓글 (리플) 작성 -->
+    <insert id="setReple" parameterType="repleSetVO">
+        INSERT INTO review_reple (review_num, member_num, review_reple_content)
+        VALUES (#{reviewNum}, #{memberNum}, #{reviewRepleContent})
+    </insert>
+
+
+</mapper>
